@@ -1,4 +1,101 @@
-# React + Vite
+# 🌐 Personal Portfolio
+
+A simple and clean personal portfolio built with **React + Vite**.  
+It includes basic sections like **About**, **Projects**, and **Contact**, and can be easily customized to showcase your profile.
+
+---
+
+## 🚀 Features
+
+- ⚡ Built with [Vite](https://vitejs.dev/) for fast development and builds
+- ⚛️ Powered by [React](https://react.dev/)
+- 🎨 Styled with [Tailwind CSS](https://tailwindcss.com/)
+- 🔥 Hot Module Replacement (HMR) enabled
+
+---
+
+## 🛠️ Installation & Setup
+
+1. **Clone this repository**
+
+```bash
+git clone https://github.com/your-username/personal-portfolio.git
+cd personal-portfolio
+```
+
+2. **Install dependencies**
+
+```bash
+npm install
+```
+
+3. **Run the project locally**
+
+```bash
+npm run dev
+```
+
+4. **Open in browser**
+
+```sh
+http://localhost:5173
+```
+
+---
+
+## 📁 Project Structure
+
+```ini
+personal-portfolio/
+├── public/                # Static assets
+├── src/
+│   ├── components/        # Reusable UI components
+│   ├── sections/          # About, Projects, Contact sections
+│   ├── App.jsx            # Main App component
+│   ├── main.jsx           # Entry point
+│   └── index.css          # Tailwind styles
+├── .eslintrc.cjs          # ESLint configuration
+├── index.html             # HTML template
+├── package.json           # Project dependencies
+└── vite.config.js         # Vite configuration
+```
+
+---
+
+## 🧑‍💻 Customization
+
+- Update your **name**, **bio**, and **project details** in the `src/sections/` folder.
+
+- Modify styles in `index.css` or add your own Tailwind utilities.
+
+- To deploy, you can use:
+
+```bash
+npm run build
+```
+
+---
+
+## 🧩 Tech Stack
+
+- **React** – UI Library
+- **Vite** – Build Tool
+- **Tailwind CSS** – Styling
+- **ESLint** – Code Linting
+
+---
+
+## 📝 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+### 💡 Author
+
+**Truong Nguyen**  
+Frontend Developer ✨  
+📧 [dtn06052005@gmail.com](mailto:dtn06052005@gmail.com)
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
