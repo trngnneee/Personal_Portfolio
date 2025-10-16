@@ -9,10 +9,10 @@ import { toast } from "sonner";
 
 export const Section4 = () => {
   const [copied, setCopied] = useState(false);
+  const [copied1, setCopied1] = useState(false);
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
-    setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -180,7 +180,10 @@ export const Section4 = () => {
                     <FaEnvelope size={20} />
                     <span className="text-[20px]">dtn06052005@gmail.com</span>
                   </div>
-                  <button onClick={() => handleCopy("dtn06052005@gmail.com")}>
+                  <button onClick={() => {
+                    handleCopy("dtn06052005@gmail.com");
+                    setCopied(true);
+                  }}>
                     {copied ? (
                       <span className="text-[#CECECE]">Copied!</span>
                     ) : (
@@ -194,8 +197,11 @@ export const Section4 = () => {
                     <FaPhone size={20} />
                     <span className="text-[20px]">0911398029</span>
                   </div>
-                  <button onClick={() => handleCopy("0911398029")}>
-                    {copied ? (
+                  <button onClick={() => {
+                    handleCopy("0911398029");
+                    setCopied1(true);
+                  }}>
+                    {copied1 ? (
                       <span className="text-[#CECECE]">Copied!</span>
                     ) : (
                       <FaCopy className="text-gray-400 hover:text-[#3F8E00] hover:scale-[1.2]" />

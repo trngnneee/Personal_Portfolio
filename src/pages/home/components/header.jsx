@@ -38,7 +38,7 @@ export const Header = () => {
           }`}
       >
         <Link
-          className="hover:bg-[#ffffff10] px-[20px] py-[5px] rounded-[8px] hover:scale-[1.15] cursor-pointer"
+          className="hover:bg-[#ffffff10] px-[20px] py-[5px] rounded-[8px] hover:scale-[1.15] transition-all duration-200 cursor-pointer"
           to="home"
           smooth={true}
           duration={500}
@@ -46,7 +46,7 @@ export const Header = () => {
           Home
         </Link>
         <Link
-          className="hover:bg-[#ffffff10] px-[20px] py-[5px] rounded-[8px] hover:scale-[1.15] cursor-pointer"
+          className="hover:bg-[#ffffff10] px-[20px] py-[5px] rounded-[8px] hover:scale-[1.15] transition-all duration-200 cursor-pointer"
           to="project"
           smooth={true}
           duration={500}
@@ -54,7 +54,7 @@ export const Header = () => {
           Project
         </Link>
         <Link
-          className="hover:bg-[#ffffff10] px-[20px] py-[5px] rounded-[8px] hover:scale-[1.15] cursor-pointer"
+          className="hover:bg-[#ffffff10] px-[20px] py-[5px] rounded-[8px] hover:scale-[1.15] transition-all duration-200 cursor-pointer"
           to="education"
           smooth={true}
           duration={500}
@@ -62,7 +62,7 @@ export const Header = () => {
           Education
         </Link>
         <Link
-          className="hover:bg-[#ffffff10] px-[20px] py-[5px] rounded-[8px] hover:scale-[1.15] cursor-pointer"
+          className="hover:bg-[#ffffff10] px-[20px] py-[5px] rounded-[8px] hover:scale-[1.15] transition-all duration-200 cursor-pointer"
           to="contact"
           smooth={true}
           duration={500}
@@ -70,16 +70,16 @@ export const Header = () => {
           Contact me
         </Link>
         <div className="flex items-center gap-[20px]">
-          <a href="https://www.linkedin.com/in/nguy%C3%AAn-tr%C6%B0%E1%BB%9Dng-8a075934b/" target="blank" className="hover:bg-[#ffffff10] hover:scale-[1.15] cursor-pointer p-2 rounded-[10px]">
+          <a href="https://www.linkedin.com/in/nguy%C3%AAn-tr%C6%B0%E1%BB%9Dng-8a075934b/" target="blank" className="hover:bg-[#ffffff10] hover:scale-[1.15] transition-all duration-200 cursor-pointer p-2 rounded-[10px]">
             <FaLinkedinIn size={20} />
           </a>
-          <a href="https://github.com/trngnneee" target="blank" className="hover:bg-[#ffffff10] hover:scale-[1.15] cursor-pointer p-2 rounded-[10px]">
+          <a href="https://github.com/trngnneee" target="blank" className="hover:bg-[#ffffff10] hover:scale-[1.15] transition-all duration-200 cursor-pointer p-2 rounded-[10px]">
             <FaGithub size={20} />
           </a>
-          <a href="https://www.facebook.com/trngn.neee" target="blank" className="hover:bg-[#ffffff10] hover:scale-[1.15] cursor-pointer p-2 rounded-[10px]">
+          <a href="https://www.facebook.com/trngn.neee" target="blank" className="hover:bg-[#ffffff10] hover:scale-[1.15] transition-all duration-200 cursor-pointer p-2 rounded-[10px]">
             <FaFacebook size={20} />
           </a>
-          <a href="https://www.instagram.com/trngn.neee/" target="blank" className="hover:bg-[#ffffff10] hover:scale-[1.15] cursor-pointer p-2 rounded-[10px]">
+          <a href="https://www.instagram.com/trngn.neee/" target="blank" className="hover:bg-[#ffffff10] hover:scale-[1.15] transition-all duration-200 cursor-pointer p-2 rounded-[10px]">
             <FaInstagram size={20} />
           </a>
         </div>

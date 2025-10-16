@@ -12,7 +12,7 @@ export const ProjectItem = ({ item, order }) => {
 
   const TechItem = ({ title }) => {
     return (
-      <div className="bg-[#ffffff10] w-[100px] flex justify-center items-center rounded-full text-[12px] font-bold text-[#CECECE]">{title}</div>
+      <div className="bg-[#ffffff10] w-[100px] flex justify-center items-center rounded-full text-[12px] font-bold text-[#CECECE] hover:scale-[1.1] transition-all duration-200 hover:shadow-2xl">{title}</div>
     )
   }
 

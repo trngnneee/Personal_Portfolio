@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { FaAngleRight } from "react-icons/fa6";
 import { Element } from "react-scroll";
 import Typed from 'typed.js';
 import { LuDownload } from "react-icons/lu";
@@ -7,9 +6,6 @@ import { GrayButton } from "../../../components/gray-button";
 import { GreenButton } from "../../../components/green-button";
 
 export const Section1 = () => {
-  const [projectHover, setProjectHover] = useState(false);
-  const [contactHover, setContactHover] = useState(false);
-
   const el = useRef(null);
 
   useEffect(() => {
@@ -40,16 +36,16 @@ export const Section1 = () => {
               className="w-full h-full object-cover aspect-square"
             />
           </div>
-          <div className="w-[700px]">
+          <div className="w-[800px]">
             <div className="relative min-h-[60px] mb-[30px]" data-aos="fade-up">
-              <span className="invisible absolute font-extrabold text-[44px]">
+              <span className="invisible absolute font-extrabold text-[70px]">
                 I'm Dang Truong Nguyen 💻
               </span>
-              <span ref={el} className="font-extrabold text-white text-[44px]"></span>
+              <span ref={el} className="font-extrabold text-white text-[50px]"></span>
             </div>
-            <div className="text-[#CECECE] mb-[10px] text-[20px] font-semibold" data-aos="fade-up" data-aos-delay="100">Frontend Developer | Backend Developer</div>
+            <div className="text-[#CECECE] mb-[50px] text-[30px] font-semibold" data-aos="fade-up" data-aos-delay="100">Frontend Developer | Backend Developer</div>
             <div className="text-[#CECECE] mb-[10px] text-sm" data-aos="fade-up" data-aos-delay="300">I’m interested in building a web application as a way to deepen my understanding of both front-end and back-end development, improve my problem-solving skills, and gain practical experience with real-world web technologies.</div>
-            <div className="text-[#CECECE] mb-[30px] text-sm" data-aos="fade-up" data-aos-delay="300">Aside from coding, I enjoy playing football and badminton, and sometimes I unwind with video games. I’m also a coffee enthusiast ☕ — nothing fuels my creativity quite like a good cup of coffee. As I continue to learn and grow, I’m working toward becoming a skilled software engineer.</div>
+            <div className="text-[#CECECE] mb-[100px] text-sm" data-aos="fade-up" data-aos-delay="300">Aside from coding, I enjoy playing football and badminton, and sometimes I unwind with video games. I’m also a coffee enthusiast ☕ — nothing fuels my creativity quite like a good cup of coffee. As I continue to learn and grow, I’m working toward becoming a skilled software engineer.</div>
             <div className="flex items-center gap-[20px] mb-[20px]" data-aos="fade-up" data-aos-delay="500">
               <GreenButton
                 title={"View Project"}
@@ -67,6 +63,10 @@ export const Section1 = () => {
                 <LuDownload className="text-[18px]" />
                 <span className="font-semibold tracking-wide">Download My CV</span>
               </a>
+            </div>
+
+            <div>
+
             </div>
           </div>
         </div>
