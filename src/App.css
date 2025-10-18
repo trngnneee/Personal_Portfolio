@@ -8,3 +8,12 @@
 .main-text{
   font-family: "Raleway", sans-serif;;
 }
+
+@keyframes softPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+.my-atropos img {
+  animation: softPulse 6s ease-in-out infinite;
+}

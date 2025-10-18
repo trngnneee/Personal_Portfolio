@@ -164,7 +164,7 @@ export const Section4 = () => {
 
                 <button
                   type="submit"
-                  className="w-full mt-3 py-3 rounded-lg font-medium text-white bg-[#3F8E00] hover:opacity-90 hover:scale-[1.02] transition"
+                  className="w-full mt-3 py-3 rounded-lg font-medium text-white bg-[#3F8E00] hover:opacity-90 hover:scale-[1.02] hover:shadow-[0_0_60px_rgba(255,255,255,0.6)] transition"
                 >
                   Send Message
                 </button>

@@ -20,7 +20,7 @@ export const ProjectItem = ({ item, order }) => {
     <>
       <div data-aos="fade-up" className={`flex gap-[26px] items-center ${isReverse ? "flex-row-reverse" : "flex-row"}`}
       >
-        <div className="w-1/2 h-[300px] overflow-hidden rounded-[5px] flex-shrink-0">
+        <div className="w-1/2 h-[300px] overflow-hidden rounded-[5px] flex-shrink-0 hover:shadow-[0_0_60px_rgba(255,255,255,0.6)] transition-all duration-300">
           <img src={item.image} className="w-full h-full object-cover" />
         </div>
         <div>
@@ -39,7 +39,7 @@ export const ProjectItem = ({ item, order }) => {
             <Link
               to={item.githubLink}
               target="blank"
-              className="group relative flex items-center justify-center gap-2 w-[200px] py-3 rounded-md border border-[#62BA1B] bg-[#3F8E00] text-white font-semibold text-[16px] cursor-pointer hover:bg-[#469a01] transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.02]"
+              className="group relative flex items-center justify-center gap-2 w-[200px] py-3 rounded-md border border-[#62BA1B] bg-[#3F8E00] hover:shadow-[0_0_60px_rgba(255,255,255,0.6)] text-white font-semibold text-[16px] cursor-pointer hover:bg-[#469a01] transition-all duration-300 shadow-md hover:scale-[1.02]"
               onMouseEnter={() => setGithubHover(true)}
               onMouseLeave={() => setGithubHover(false)}
             >
@@ -54,7 +54,7 @@ export const ProjectItem = ({ item, order }) => {
               <Link
                 to={item.demoLink}
                 target="blank"
-                className="group relative flex items-center justify-center gap-2 w-[200px] py-3 rounded-md border text-white font-semibold text-[16px] cursor-pointer hover:bg-[#ffffff10] transition-all duration-300 shadow-md hover:shadow-lg hover:scale-[1.02]"
+                className="group relative flex items-center justify-center gap-2 w-[200px] py-3 rounded-md border text-white font-semibold text-[16px] cursor-pointer hover:bg-[#ffffff10] hover:shadow-[0_0_60px_rgba(255,255,255,0.6)] transition-all duration-300 shadow-md hover:scale-[1.02]"
                 onMouseEnter={() => setDemoHover(true)}
                 onMouseLeave={() => setDemoHover(false)}
               >
