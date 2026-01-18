@@ -24,7 +24,7 @@ export const ProjectItem = ({ item, order }) => {
           <img src={item.image} className="w-full h-full object-cover" />
         </div>
         <div>
-          <div className="w-[200px] flex justify-center items-center bg-[#ffffff10] text-white px-3 py-[5px] rounded-full text-[14px] font-bold mb-[20px]">{item.role}</div>
+          <div className="flex justify-center items-center bg-[#ffffff10] text-white px-3 py-[5px] rounded-full text-[14px] font-bold mb-[20px]">{item.role}</div>
           <div className="text-white main-text text-[24px] font-extrabold mb-[10px]">{item.projectName}</div>
           <div className="text-[#CECECE] text-sm mb-[10px]">{item.desc}</div>
           <div className="mb-[40px] flex items-center flex-wrap gap-[5px]">

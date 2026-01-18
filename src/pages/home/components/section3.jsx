@@ -43,6 +43,13 @@ export const Section3 = () => {
       icon: <HiUserGroup className="text-[22px]" />,
       color: "#E11D48"
     },
+    {
+      year: "2025",
+      title: "Fourth Prize - Vietnam Datathon, Data Storm 2025",
+      school: "Data Storm 2025",
+      icon: <HiUserGroup className="text-[22px]" />,
+      color: "#E11D48"
+    },
   ];
 
   return (
