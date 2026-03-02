@@ -65,7 +65,7 @@ export const Section3 = () => {
             <div className="absolute left-[50px] top-0 bottom-0 w-[3px] bg-[#CECECE]"></div>
 
             <div className="flex flex-col gap-10">
-              {educationData.map((edu, index) => (
+              {educationData.reverse().map((edu, index) => (
                 <div key={index} className="relative flex items-start gap-6 hover:scale-[1.05] transition-all duration-300">
                   <div className="flex-1 flex items-center gap-[20px] bg-[#ffffff10]/80 backdrop-blur-sm p-6 rounded-2xl border border-[#2A2A2A] shadow-md hover:shadow-lg hover:translate-y-[-2px] transition-all duration-300">
                     <div
