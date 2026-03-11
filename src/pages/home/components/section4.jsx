@@ -85,15 +85,92 @@ export const Section4 = () => {
 
   return (
     <>
-      <Element id="contact" className="container mx-auto px-[95px] mb-[100px]">
+      <Element id="contact" className="container mx-auto px-5 md:px-[95px] mb-[100px]">
         <div className="flex flex-col items-center pt-[50px]">
           <Title
             title={"Contact me"}
             subTitle={"I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions. Feel free to reach out!"}
           />
 
-          <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div className="bg-[#ffffff10] p-8 rounded-xl shadow-lg border border-[#1e2230]">
+          <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+            <div className="bg-[#ffffff10] p-6 md:p-8 rounded-xl shadow-lg border border-[#1e2230] flex flex-col justify-between md:h-1/2 order-1 md:order-2">
+              <div>
+                <h2 className="text-2xl font-semibold text-[#CECECE] mb-6">Contact Details</h2>
+
+                <div className="flex items-center justify-between mb-[24px] md:mb-[30px]">
+                  <div className="flex items-center gap-[16px] md:gap-[30px] text-gray-300">
+                    <FaEnvelope className="text-[14px] sm:text-[18px] md:text-[20px]" />
+                    <span className="text-[14px] sm:text-[18px] md:text-[20px]">dtn06052005@gmail.com</span>
+                  </div>
+                  <button onClick={() => {
+                    handleCopy("dtn06052005@gmail.com");
+                    setCopied(true);
+                  }}>
+                    {copied ? (
+                      <span className="text-[#CECECE]">Copied!</span>
+                    ) : (
+                      <FaCopy className="text-[14px] sm:text-[16px] md:text-[18px] text-gray-400 hover:text-[#3F8E00] hover:scale-[1.2]" />
+                    )}
+                  </button>
+                </div>
+
+                <div className="flex items-center justify-between mb-[24px] md:mb-[30px]">
+                  <div className="flex items-center gap-[16px] md:gap-[30px] text-gray-300">
+                    <FaPhone className="text-[14px] sm:text-[18px] md:text-[20px]" />
+                    <span className="text-[14px] sm:text-[18px] md:text-[20px]">0911398029</span>
+                  </div>
+                  <button onClick={() => {
+                    handleCopy("0911398029");
+                    setCopied1(true);
+                  }}>
+                    {copied1 ? (
+                      <span className="text-[#CECECE]">Copied!</span>
+                    ) : (
+                      <FaCopy className="text-[14px] sm:text-[16px] md:text-[18px] text-gray-400 hover:text-[#3F8E00] hover:scale-[1.2]" />
+                    )}
+                  </button>
+                </div>
+
+                <hr className="border-[#CECECE] mb-6" />
+
+                <div className="flex justify-center gap-5 text-gray-400">
+                  <a
+                    href="https://www.linkedin.com/in/nguy%C3%AAn-tr%C6%B0%E1%BB%9Dng-8a075934b/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-[#3F8E00] hover:scale-[1.2] transition"
+                  >
+                    <FaLinkedinIn className="text-[22px] sm:text-[26px] md:text-[30px]" />
+                  </a>
+                  <a
+                    href="https://github.com/trngnneee"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-[#3F8E00] hover:scale-[1.2] transition"
+                  >
+                    <FaGithub className="text-[22px] sm:text-[26px] md:text-[30px]" />
+                  </a>
+                  <a
+                    href="https://www.facebook.com/trngn.neee"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-[#3F8E00] hover:scale-[1.2] transition"
+                  >
+                    <FaFacebookF className="text-[22px] sm:text-[26px] md:text-[30px]" />
+                  </a>
+                  <a
+                    href="https://www.instagram.com/trngn.neee/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-[#3F8E00] hover:scale-[1.2] transition"
+                  >
+                    <FaInstagram className="text-[22px] sm:text-[26px] md:text-[30px]" />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-[#ffffff10] p-6 md:p-8 rounded-xl shadow-lg border border-[#1e2230] order-2 md:order-1">
               <h2 className="text-2xl font-semibold text-[#CECECE] mb-6">Send Message</h2>
 
               <form id="contact-form" className="space-y-3">
@@ -169,83 +246,6 @@ export const Section4 = () => {
                   Send Message
                 </button>
               </form>
-            </div>
-
-            <div className="bg-[#ffffff10] p-8 rounded-xl shadow-lg border border-[#1e2230] flex flex-col justify-between h-1/2">
-              <div>
-                <h2 className="text-2xl font-semibold text-[#CECECE] mb-6">Contact Details</h2>
-
-                <div className="flex items-center justify-between mb-[30px]">
-                  <div className="flex items-center gap-[30px] text-gray-300">
-                    <FaEnvelope size={20} />
-                    <span className="text-[20px]">dtn06052005@gmail.com</span>
-                  </div>
-                  <button onClick={() => {
-                    handleCopy("dtn06052005@gmail.com");
-                    setCopied(true);
-                  }}>
-                    {copied ? (
-                      <span className="text-[#CECECE]">Copied!</span>
-                    ) : (
-                      <FaCopy className="text-gray-400 hover:text-[#3F8E00] hover:scale-[1.2]" />
-                    )}
-                  </button>
-                </div>
-
-                <div className="flex items-center justify-between mb-[30px]">
-                  <div className="flex items-center gap-[30px] text-gray-300">
-                    <FaPhone size={20} />
-                    <span className="text-[20px]">0911398029</span>
-                  </div>
-                  <button onClick={() => {
-                    handleCopy("0911398029");
-                    setCopied1(true);
-                  }}>
-                    {copied1 ? (
-                      <span className="text-[#CECECE]">Copied!</span>
-                    ) : (
-                      <FaCopy className="text-gray-400 hover:text-[#3F8E00] hover:scale-[1.2]" />
-                    )}
-                  </button>
-                </div>
-
-                <hr className="border-[#CECECE] mb-6" />
-
-                <div className="flex justify-center gap-5 text-gray-400">
-                  <a
-                    href="https://www.linkedin.com/in/nguy%C3%AAn-tr%C6%B0%E1%BB%9Dng-8a075934b/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-[#3F8E00] hover:scale-[1.2] transition"
-                  >
-                    <FaLinkedinIn size={30} />
-                  </a>
-                  <a
-                    href="https://github.com/trngnneee"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-[#3F8E00] hover:scale-[1.2] transition"
-                  >
-                    <FaGithub size={30} />
-                  </a>
-                  <a
-                    href="https://www.facebook.com/trngn.neee"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-[#3F8E00] hover:scale-[1.2] transition"
-                  >
-                    <FaFacebookF size={30} />
-                  </a>
-                  <a
-                    href="https://www.instagram.com/trngn.neee/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-[#3F8E00] hover:scale-[1.2] transition"
-                  >
-                    <FaInstagram size={30} />
-                  </a>
-                </div>
-              </div>
             </div>
           </div>
         </div>

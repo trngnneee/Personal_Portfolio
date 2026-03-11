@@ -18,7 +18,7 @@ export const Section2 = () => {
       ]
     },
     {
-      projectName: "AirForce",
+      projectName: "AirForce - NASA International Space Apps Challenge (Top 10 Hackathon)",
       desc: "A web platform from the NASA International Space Apps Challenge for monitoring and forecasting air quality using real-time environmental data and predictive models.",
       githubLink: "https://github.com/DanielNguyen-05/AirForce",
       demoLink: "https://airforceclient.vercel.app",
@@ -36,7 +36,7 @@ export const Section2 = () => {
       image: "https://res.cloudinary.com/dnqinxiwo/image/upload/v1768743874/Screenshot_2025-12-29_105140_e8iybr.png",
       role: "End-to-end Developer",
       techStack: [
-        "NextJs", "TailwindCSS", "shadcn ui", "FlaskAPI", "MongoDB", "Cloudinary", "RAG", "Gemini AI"
+        "NextJs", "TailwindCSS", "shadcn ui", "FlaskAPI", "MongoDB", "Cloudinary", "RAG", "Gemini AI", "Momo", "ZaloPay"
       ]
     },
     {
@@ -65,7 +65,7 @@ export const Section2 = () => {
   const navigate = useNavigate();
 
   return (
-    <Element id="project" className="container mx-auto px-[95px] mb-[100px]">
+    <Element id="project" className="container mx-auto px-5 md:px-[95px] mb-[30px] sm:mb-[100px]">
       <div className="flex flex-col items-center pt-[50px]">
         <Title
           title={"My Project 🚀"}

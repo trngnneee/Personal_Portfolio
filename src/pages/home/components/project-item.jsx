@@ -12,22 +12,22 @@ export const ProjectItem = ({ item, order }) => {
 
   const TechItem = ({ title }) => {
     return (
-      <div className="bg-[#ffffff10] w-[100px] flex justify-center items-center rounded-full text-[12px] font-bold text-[#CECECE] hover:scale-[1.1] transition-all duration-200 hover:shadow-2xl">{title}</div>
+      <div className="bg-[#ffffff10] w-[60px] sm:w-[100px] flex justify-center items-center rounded-full text-[8px] sm:text-[12px] font-bold text-[#CECECE] hover:scale-[1.1] transition-all duration-200 hover:shadow-2xl">{title}</div>
     )
   }
 
   return (
     <>
-      <div data-aos="fade-up" className={`flex gap-[26px] items-center ${isReverse ? "flex-row-reverse" : "flex-row"}`}
+      <div data-aos="fade-up" className={`flex flex-col md:flex-row gap-[20px] md:gap-[26px] items-start md:items-center ${isReverse ? "md:flex-row-reverse" : "md:flex-row"}`}
       >
-        <div className="w-1/2 h-[300px] overflow-hidden rounded-[5px] flex-shrink-0 hover:shadow-[0_0_60px_rgba(255,255,255,0.6)] transition-all duration-300">
+        <div className="w-full md:w-1/2 h-[220px] sm:h-[260px] md:h-[300px] overflow-hidden rounded-[5px] flex-shrink-0 hover:shadow-[0_0_60px_rgba(255,255,255,0.6)] transition-all duration-300">
           <img src={item.image} className="w-full h-full object-cover" />
         </div>
-        <div>
-          <div className="flex justify-center items-center bg-[#ffffff10] text-white px-3 py-[5px] rounded-full text-[14px] font-bold mb-[20px]">{item.role}</div>
-          <div className="text-white main-text text-[24px] font-extrabold mb-[10px]">{item.projectName}</div>
+        <div className="w-full">
+          <div className="flex justify-center items-center bg-[#ffffff10] text-white px-3 py-[5px] rounded-full text-[12px] md:text-[14px] font-bold mb-[14px] md:mb-[20px]">{item.role}</div>
+          <div className="text-white main-text text-[20px] md:text-[24px] font-extrabold mb-[10px]">{item.projectName}</div>
           <div className="text-[#CECECE] text-sm mb-[10px]">{item.desc}</div>
-          <div className="mb-[40px] flex items-center flex-wrap gap-[5px]">
+          <div className="mb-[24px] md:mb-[40px] flex items-center flex-wrap gap-[5px]">
             {item.techStack.map((tech, index) => (
               <TechItem
                 key={index}
@@ -35,11 +35,11 @@ export const ProjectItem = ({ item, order }) => {
               />
             ))}
           </div>
-          <div className="flex items-center gap-[20px]">
+          <div className="flex flex-wrap items-center gap-[12px] md:gap-[20px]">
             <Link
               to={item.githubLink}
               target="blank"
-              className="group relative flex items-center justify-center gap-2 w-[200px] py-3 rounded-md border border-[#62BA1B] bg-[#3F8E00] hover:shadow-[0_0_60px_rgba(255,255,255,0.6)] text-white font-semibold text-[16px] cursor-pointer hover:bg-[#469a01] transition-all duration-300 shadow-md hover:scale-[1.02]"
+              className="group relative flex items-center justify-center gap-2 w-full sm:w-[200px] py-3 rounded-md border border-[#62BA1B] bg-[#3F8E00] hover:shadow-[0_0_60px_rgba(255,255,255,0.6)] text-white font-semibold text-[16px] cursor-pointer hover:bg-[#469a01] transition-all duration-300 shadow-md hover:scale-[1.02]"
               onMouseEnter={() => setGithubHover(true)}
               onMouseLeave={() => setGithubHover(false)}
             >
@@ -54,7 +54,7 @@ export const ProjectItem = ({ item, order }) => {
               <Link
                 to={item.demoLink}
                 target="blank"
-                className="group relative flex items-center justify-center gap-2 w-[200px] py-3 rounded-md border text-white font-semibold text-[16px] cursor-pointer hover:bg-[#ffffff10] hover:shadow-[0_0_60px_rgba(255,255,255,0.6)] transition-all duration-300 shadow-md hover:scale-[1.02]"
+                className="group relative flex items-center justify-center gap-2 w-full sm:w-[200px] py-3 rounded-md border text-white font-semibold text-[16px] cursor-pointer hover:bg-[#ffffff10] hover:shadow-[0_0_60px_rgba(255,255,255,0.6)] transition-all duration-300 shadow-md hover:scale-[1.02]"
                 onMouseEnter={() => setDemoHover(true)}
                 onMouseLeave={() => setDemoHover(false)}
               >
