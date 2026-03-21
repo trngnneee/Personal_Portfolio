@@ -2,6 +2,7 @@ import { NeatGradient } from "@firecms/neat";
 import { config } from "../config/neat.config";
 import { useEffect, useRef, useState } from "react";
 import { Header } from "./home/components/header";
+import { Footer } from "./home/components/footer";
 import { HashLoader } from "react-spinners";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -49,8 +50,11 @@ export default function Layout({ children }) {
       ) : (
         <>
           <Header />
-          <div className="relative z-10" data-aos="fade-in">
-            {children}
+          <div className="relative z-10 flex flex-col min-h-screen" data-aos="fade-in">
+            <div className="flex-grow">
+              {children}
+            </div>
+            <Footer />
           </div>
         </>
       )}
