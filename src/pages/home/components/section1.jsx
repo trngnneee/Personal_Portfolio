@@ -87,7 +87,7 @@ export const Section1 = () => {
                     {stacks.map((stack, index) => (
                       <>
                         <span
-                          key={`${category}-${index}`}
+                          key={`${index}`}
                           className={`bg-[#ffffff10]/80 cursor-pointer text-white px-2 sm:px-4 py-1 rounded-xl text-[7px] sm:text-[10px] font-medium transition-all duration-300 shadow-md hover:shadow-[0_0_60px_rgba(255,255,255,0.6)] hover:scale-105`}
                         >{stack}</span>
                       </>

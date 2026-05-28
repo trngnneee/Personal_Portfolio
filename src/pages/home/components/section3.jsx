@@ -6,7 +6,11 @@ import { FaMedal } from "react-icons/fa6";
 import { HiUserGroup } from "react-icons/hi2";
 import { Title } from "../../../components/title";
 
+import { useState } from "react";
+
 export const Section3 = () => {
+  const [activeIndex, setActiveIndex] = useState(null);
+
   const educationData = [
     {
       year: "2022-2023",
@@ -78,7 +82,7 @@ export const Section3 = () => {
 
             <div className="flex flex-col gap-10">
               {educationData.reverse().map((edu, index) => (
-                <div key={index} className="relative flex items-start gap-4 md:gap-6 group">
+                <div key={index} className="relative flex items-start gap-4 md:gap-6 group" onClick={() => setActiveIndex(activeIndex === index ? null : index)}>
                   <div className="flex-1 flex flex-col bg-[#ffffff10]/80 backdrop-blur-sm p-4 md:p-6 rounded-2xl border border-[#2A2A2A] shadow-md hover:shadow-lg hover:translate-y-[-2px] transition-all duration-300">
                     <div className="flex items-center gap-[14px] md:gap-[20px]">
                       <div
@@ -101,8 +105,9 @@ export const Section3 = () => {
                       </div>
                     </div>
 
-                    {/* Hover expand section */}
-                    <div className="grid grid-rows-[0fr] opacity-0 group-hover:grid-rows-[1fr] group-hover:opacity-100 transition-all duration-700 ease-in-out delay-300 md:delay-500 overflow-hidden">
+                    <div className={`grid overflow-hidden transition-all duration-700 ease-in-out delay-300 md:delay-500 ${
+                      activeIndex === index ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    } group-hover:grid-rows-[1fr] group-hover:opacity-100`}>
                       <div className="min-h-0">
                         <div className="mt-4 pt-4 border-t border-[#ffffff20]">
                           {edu.image && (
