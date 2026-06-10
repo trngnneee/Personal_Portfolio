@@ -28,19 +28,11 @@ export const Section1 = () => {
   }, []);
 
   const techStacks = {
-    language: ["HTML", "CSS", "JavaScript", "Python", "C++"],
-    frontend: ["React", "Next.js", "Tailwind CSS", "shadcn/ui", "zustand"],
-    backend: ["Node.js", "Express.js", "FlaskAPI", "FastAPI"],
-    database: ["MongoDB", "PostgreSQL", "MySQL", "Microsoft SQL Server"],
-    tools: ["Git", "Docker", "AWS"]
-  }
-
-  const techColors = {
-    language: 'bg-blue-600 hover:bg-blue-700',
-    frontend: 'bg-green-600 hover:bg-green-700',
-    backend: 'bg-orange-600 hover:bg-orange-700',
-    database: 'bg-purple-600 hover:bg-purple-700',
-    tools: 'bg-red-600 hover:bg-red-700'
+    "Languages": ["C++", "JavaScript", "TypeScript", "Python", "SQL"],
+    "Frontend": ["React", "Next.js", "Tailwind CSS", "HTML5", "CSS3", "Sass"],
+    "Backend & APIs": ["Node.js", "Express.js", "FastAPI", "Flask"],
+    "Databases": ["MongoDB", "PostgreSQL", "MySQL", "Redis"],
+    "Cloud & DevOps": ["AWS (SAA-C03)", "Docker", "Jenkins", "GitHub Actions"]
   }
 
   return (
@@ -75,15 +67,17 @@ export const Section1 = () => {
               </span>
               <span ref={el} className="font-extrabold text-white text-[20px] sm:text-[28px] sm:text-[34px] lg:text-[50px]"></span>
             </div>
-            <div className="text-[#CECECE] mb-[20px] text-[14px] sm:text-[22px] lg:text-[30px] font-semibold" data-aos="fade-up" data-aos-delay="500">Frontend Developer | Backend Developer</div>
-            <div className="text-[#CECECE] mb-[30px] lg:mb-[50px] text-[10px] sm:text-sm" data-aos="fade-up" data-aos-delay="800">I’m interested in building a web application as a way to deepen my understanding of both front-end and back-end development, improve my problem-solving skills, and gain practical experience with real-world web technologies.</div>
+            <div className="text-[#CECECE] mb-[20px] text-[14px] sm:text-[22px] lg:text-[30px] font-semibold" data-aos="fade-up" data-aos-delay="500">Software Engineering Student | Backend & Cloud DevOps</div>
+            <div className="text-[#CECECE] mb-[30px] lg:mb-[50px] text-[10px] sm:text-sm" data-aos="fade-up" data-aos-delay="800">
+              Information Technology student majoring in Software Engineering at VNU - University of Science, Ho Chi Minh City. AWS Certified Solutions Architect – Associate (SAA-C03) with a GPA of 8.92/10 and IELTS 6.5. Interested in Backend Engineering, Cloud Architecture, DevOps, and AI-powered Applications. Currently learning advanced System Design, AWS Cloud, and CI/CD.
+            </div>
             {/* <div className="text-[#CECECE] mb-[20px] text-sm" data-aos="fade-up" data-aos-delay="800">Aside from coding, I enjoy playing football and badminton, and sometimes I unwind with video games. I’m also a coffee enthusiast ☕ — nothing fuels my creativity quite like a good cup of coffee. As I continue to learn and grow, I’m working toward becoming a skilled software engineer.</div> */}
             <div className="mb-[20px]" data-aos="fade-up" data-aos-delay="1000">
               <h3 className="text-white text-[16px] sm:text-[24px] lg:text-[30px] font-semibold mb-3">Technologies I work with:</h3>
               <div className="space-y-2">
                 {Object.entries(techStacks).map(([category, stacks]) => (
                   <div key={category} className="flex flex-wrap gap-1">
-                    <div className="text-white text-[10px] sm:text-sm capitalize font-light">{category}:</div>
+                    <div className="text-white text-[10px] sm:text-sm font-light">{category}:</div>
                     {stacks.map((stack, index) => (
                       <>
                         <span

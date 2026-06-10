@@ -13,6 +13,7 @@ export const Header = () => {
     { label: "Home", to: "home" },
     { label: "Project", to: "project" },
     { label: "Education", to: "education" },
+    { label: "Extracurriculum", to: "experience" },
     { label: "Contact me", to: "contact" },
   ];
 

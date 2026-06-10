@@ -13,6 +13,14 @@ export const Section3 = () => {
 
   const educationData = [
     {
+      year: "2022",
+      title: "2nd Prize — Lam Dong Provincial Excellent Student Competition (Physics)",
+      school: "Lam Dong Department of Education and Training",
+      icon: <FaMedal className="text-[14px] sm:text-[18px] md:text-[22px]" />,
+      color: "#C0C0C0",
+      desc: "Won the second prize in the Provincial Excellent Student Competition in Physics during high school."
+    },
+    {
       year: "2022-2023",
       title: "IELTS 6.5",
       school: "IDP IELTS Viet Nam",
@@ -22,6 +30,14 @@ export const Section3 = () => {
       desc: "I achieved an overall band score of 6.5, demonstrating a solid command of the English language."
     },
     {
+      year: "2023",
+      title: "1st Prize — Lam Dong Provincial Excellent Student Competition (Physics)",
+      school: "Lam Dong Department of Education and Training",
+      icon: <FaMedal className="text-[14px] sm:text-[18px] md:text-[22px]" />,
+      color: "#FFD700",
+      desc: "Won the first prize in the Provincial Excellent Student Competition in Physics, representing Da Lat High School for the Gifted."
+    },
+    {
       year: "2023-2024",
       title: "Higher Secondary School Graduation - GPA 9.23/10.0",
       school: "Da Lat High School for the Gifted",
@@ -29,15 +45,6 @@ export const Section3 = () => {
       color: "#3F8E00",
       image: "/degree.JPG",
       desc: "Graduated with excellent academic performance from a highly competitive high school."
-    },
-    {
-      year: "2023–2027",
-      title: "Bachelor of Information Technology - Software Engineering",
-      school: "University of Science - Viet Nam National University (HCMUS)",
-      icon: <BsBriefcaseFill className="text-[14px] sm:text-[18px] md:text-[22px]" />,
-      color: "#E11D48",
-      image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1000&auto=format&fit=crop",
-      desc: "Currently pursuing a degree in Software Engineering, focusing on full-stack development and algorithms."
     },
     {
       year: "2023",
@@ -50,21 +57,30 @@ export const Section3 = () => {
     },
     {
       year: "2025",
-      title: "Top 10 Hackathon - NASA International Space App Challenge",
-      school: "NASA Space App Challenge",
+      title: "Top 11 — NASA Space Apps Challenge 2025 (Ho Chi Minh City)",
+      school: "NASA Space Apps Challenge",
       icon: <HiUserGroup className="text-[14px] sm:text-[18px] md:text-[22px]" />,
       color: "#E11D48",
       image: "/vng.jpg",
-      desc: "Collaborated with a team to build an innovative solution using space data, reaching the top 10 finalists."
+      desc: "Collaborated with a team to build an AQI monitoring and forecasting platform using satellite and environmental datasets, reaching the Top 11 finalists in Ho Chi Minh City."
     },
     {
       year: "2025",
-      title: "Fourth Prize - Vietnam Datathon, Data Storm 2025",
-      school: "Data Storm 2025",
+      title: "Encouragement Prize — Vietnam Datathon DataStorm 2025",
+      school: "DataStorm 2025",
       icon: <HiUserGroup className="text-[14px] sm:text-[18px] md:text-[22px]" />,
       color: "#E11D48",
       image: "/datastorm.JPG",
-      desc: "Developed a predictive model to analyze market trends and secured the fourth prize overall."
+      desc: "Developed a full-stack retail analytics and demand forecasting platform, securing the Encouragement Prize overall."
+    },
+    {
+      year: "2025",
+      title: "AWS Certified Solutions Architect – Associate (SAA-C03) with a score of 763/1000",
+      school: "Amazon Web Services (AWS)",
+      icon: <FaMedal className="text-[14px] sm:text-[18px] md:text-[22px]" />,
+      color: "#FF9900",
+      desc: "Earned the AWS Certified Solutions Architect – Associate certification, validating expertise in designing distributed systems on AWS.",
+      image: "/aws.png"
     },
   ];
 

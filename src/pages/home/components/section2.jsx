@@ -7,25 +7,36 @@ import { Title } from "../../../components/title"
 export const Section2 = () => {
   const data = [
     {
-      projectName: "Sale Demand Forecasting - Dom Team - Vietnam Datathon, Data Storm 2025 (Fourth Prize)",
-      desc: "A dashboard for predicting sales demand using advanced forecasting techniques.",
-      githubLink: "https://github.com/trngnneee/Datastorm",
-      demoLink: "https://datastorm-frontend.vercel.app/",
-      image: "https://res.cloudinary.com/dnqinxiwo/image/upload/v1768743522/Screenshot_2026-01-18_203707_xvt4jm.png",
-      role: "Frontend Developer - Backend Developer",
+      projectName: "Task Management System with AWS Serverless Architecture",
+      desc: "A scalable serverless task management platform built using AWS Lambda, API Gateway, DynamoDB, S3, and CloudFront. Implemented IAM roles, VPC configurations, secured API architecture, and configured CloudWatch monitoring and AWS Budgets for cost control.",
+      githubLink: "https://github.com/trngnneee",
+      demoLink: "",
+      image: "/serverless_task_dashboard.png",
+      role: "Cloud DevOps Engineer",
       techStack: [
-        "NextJs", "TailwindCSS", "shadcn ui", "FastAPI", "PostgreSQL", "Redis", "AWS", "XGBoost"
+        "AWS Lambda", "API Gateway", "DynamoDB", "S3", "CloudFront", "IAM", "VPC", "CloudWatch"
       ]
     },
     {
-      projectName: "AirForce - NASA International Space Apps Challenge (Top 10 Hackathon)",
-      desc: "A web platform from the NASA International Space Apps Challenge for monitoring and forecasting air quality using real-time environmental data and predictive models.",
+      projectName: "Retail Analytics & Demand Forecasting Platform — DataStorm 2025 (Encouragement Prize)",
+      desc: "A full-stack analytics platform for FMCG demand forecasting. Built RESTful APIs with FastAPI and PostgreSQL, optimized API performance using Redis caching, integrated LLM-powered recommendations using Google Gemini, and deployed services on AWS EC2, Render, and Vercel.",
+      githubLink: "https://github.com/trngnneee/Datastorm",
+      demoLink: "https://datastorm-frontend.vercel.app/",
+      image: "https://res.cloudinary.com/dnqinxiwo/image/upload/v1768743522/Screenshot_2026-01-18_203707_xvt4jm.png",
+      role: "Full-Stack Developer",
+      techStack: [
+        "Next.js", "Tailwind CSS", "shadcn/ui", "FastAPI", "PostgreSQL", "Redis", "Google Gemini", "AWS EC2", "Render", "Vercel"
+      ]
+    },
+    {
+      projectName: "AQI Forecasting Platform — NASA Space Apps Challenge 2025 (Top 11 HCMC)",
+      desc: "An air quality monitoring and forecasting platform. Integrated satellite and environmental datasets, built geospatial visualization UI and forecasting pipelines, and applied LSTM models for AQI prediction.",
       githubLink: "https://github.com/DanielNguyen-05/AirForce",
       demoLink: "https://airforceclient.vercel.app",
       image: "airforce.png",
       role: "Frontend Developer",
       techStack: [
-        "ReactJs", "TailwindCSS", "NodeJs", "ExpressJs", "FlaskAPI", "LSTM-Model", "TCN-Model"
+        "React", "Tailwind CSS", "Node.js", "Express.js", "Flask", "LSTM", "Geospatial UI"
       ]
     },
     {
@@ -60,7 +71,7 @@ export const Section2 = () => {
         "C++", "SFML", "OOP"
       ]
     },
-  ]
+  ];
 
   const navigate = useNavigate();
 
