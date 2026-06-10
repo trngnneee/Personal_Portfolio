@@ -9,10 +9,10 @@ export const Section2 = () => {
     {
       projectName: "Task Management System with AWS Serverless Architecture",
       desc: "A scalable serverless task management platform built using AWS Lambda, API Gateway, DynamoDB, S3, and CloudFront. Implemented IAM roles, VPC configurations, secured API architecture, and configured CloudWatch monitoring and AWS Budgets for cost control.",
-      githubLink: "https://github.com/trngnneee",
-      demoLink: "",
-      image: "/serverless_task_dashboard.png",
-      role: "Cloud DevOps Engineer",
+      githubLink: "https://github.com/trngnneee/AWS_Serverless_Application",
+      demoLink: "https://d14g6okcs1rawz.cloudfront.net/index.html",
+      image: "/aws_serverless.png",
+      role: "Cloud Engineer, Solution Architect",
       techStack: [
         "AWS Lambda", "API Gateway", "DynamoDB", "S3", "CloudFront", "IAM", "VPC", "CloudWatch"
       ]
