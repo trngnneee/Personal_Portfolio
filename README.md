@@ -5,7 +5,7 @@ Personal portfolio of **Dang Truong Nguyen** (Backend · Cloud · DevOps) with i
 | App             | Path                   | Stack                                                   | Production URL                          |
 | --------------- | ---------------------- | ------------------------------------------------------- | --------------------------------------- |
 | Public site     | `frontend/`            | Vite · React 19 · Tailwind v4 · TanStack Query · motion | https://trngnneee.io.vn                 |
-| Admin dashboard | `admin/`               | Vite · React 19 · Astryx design system · i18n (vi/en)   | https://portfolio-admin.onrender.com    |
+| Admin dashboard | `admin/`               | Vite · React 19 · Astryx design system · i18n (vi/en)   | https://admin.trngnneee.io.vn           |
 | API             | `backend/`             | Express 5 · Drizzle · PostgreSQL · Cloudinary · JWT     | https://portfolio-api-5hvt.onrender.com |
 | Shared code     | `shared/`, `markdown/` | zod schemas, API types, enums · markdown renderer       | —                                       |
 
@@ -205,7 +205,7 @@ git push origin main
    curl -s https://trngnneee.io.vn/sitemap.xml | head
    ```
 
-   Then sign in at https://portfolio-admin.onrender.com, review the scanned projects, and enable the blog if wanted.
+   Then sign in at https://admin.trngnneee.io.vn, review the scanned projects, and enable the blog if wanted.
 
 ---
 

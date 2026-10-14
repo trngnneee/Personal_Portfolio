@@ -37,9 +37,9 @@ services:
       # Supabase poolers cap client connections per project; one API instance stays well below it.
       - key: DATABASE_POOL_MAX
         value: "5"
-      # Public site + admin (admin is on its onrender.com hostname — see portfolio-admin).
+      # Public site + admin (custom domain admin.trngnneee.io.vn, plus its onrender.com hostname).
       - key: CORS_ORIGINS
-        value: https://trngnneee.io.vn,https://portfolio-admin.onrender.com
+        value: https://trngnneee.io.vn,https://admin.trngnneee.io.vn,https://portfolio-admin.onrender.com
       - key: PUBLIC_SITE_URL
         value: https://trngnneee.io.vn
       - key: PUBLIC_API_URL
@@ -122,9 +122,8 @@ services:
     buildCommand: npm ci --include=dev && npm run build -w shared && npm run build -w admin
     staticPublishPath: admin/dist
     pullRequestPreviewsEnabled: false
-    # No custom domain: Render allows 2 custom domains without a payment method (site + API use them).
-    # Served at https://portfolio-admin.onrender.com — if Render assigned a different hostname
-    # (shown on the service page), update CORS_ORIGINS on portfolio-api below.
+    # Custom domain admin.trngnneee.io.vn is attached in the Render dashboard (not declared here, so a
+    # Blueprint sync never trips the free-tier custom-domain limit). Must stay listed in the API's CORS_ORIGINS.
     envVars:
       - key: VITE_API_URL
         value: https://portfolio-api-5hvt.onrender.com

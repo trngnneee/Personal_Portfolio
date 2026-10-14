@@ -65,7 +65,7 @@ export function SkillsTerminal({
   };
 
   return (
-    <TerminalWindow title="skills-terminal">
+    <TerminalWindow title="skills-terminal" className="transition-colors focus-within:border-primary-700">
       {/* Clicking anywhere focuses the prompt, like a real terminal. */}
       <div className="p-4 font-mono text-sm" onClick={() => inputRef.current?.focus()}>
         <div

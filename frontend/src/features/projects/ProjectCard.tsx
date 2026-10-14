@@ -49,7 +49,7 @@ export function ProjectCard({
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      className="group relative flex flex-col overflow-hidden rounded-lg border border-neutral-800 bg-bg-surface transition-colors hover:border-primary-700"
+      className="group relative flex flex-col overflow-hidden rounded-lg border border-neutral-800 bg-bg-surface transition-colors hover:border-primary-700 has-[a:focus-visible]:border-primary-500 has-[a:focus-visible]:shadow-glow"
     >
       <TerminalWindow
         title={`~/projects/${project.slug}`}
@@ -78,7 +78,7 @@ export function ProjectCard({
         <Heading className="mt-3 font-mono text-lg font-bold text-neutral-50">
           <Link
             to={`${ROUTES.projects}?p=${project.slug}`}
-            className="after:absolute after:inset-0 focus:outline-none"
+            className="after:absolute after:inset-0 focus-visible:outline-none"
             aria-label={`${project.title} — details`}
           >
             {project.title}
