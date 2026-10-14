@@ -4,3 +4,4 @@ package-lock.json
 backend/drizzle
 backend/seed/assets
 PROMPT.md
+security-reports

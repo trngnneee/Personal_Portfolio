@@ -6,7 +6,14 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["**/dist/**", "**/node_modules/**", "**/coverage/**", "backend/drizzle/**"],
+    // security-reports/evidence holds captured production bundles (minified third-party JS), not source.
+    ignores: [
+      "**/dist/**",
+      "**/node_modules/**",
+      "**/coverage/**",
+      "backend/drizzle/**",
+      "security-reports/**",
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
