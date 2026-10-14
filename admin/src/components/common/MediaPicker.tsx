@@ -18,6 +18,7 @@ import { useMediaList } from "@/features/media/api";
 import type { MediaItem } from "@/features/media/types";
 import { UploadForm } from "@/features/media/UploadForm";
 import { thumb } from "@/lib/cloudinary";
+import { DialogFrame } from "@/components/common/DialogFrame";
 
 export type MediaRef = Pick<MediaItem, "id" | "url" | "alt" | "resourceType">;
 
@@ -123,8 +124,7 @@ export function MediaPickerDialog({
 
   return (
     <Dialog isOpen={isOpen} onOpenChange={onOpenChange} purpose="form" width={720}>
-      <VStack gap={4}>
-        <DialogHeader title={title} onOpenChange={onOpenChange} />
+      <DialogFrame header={<DialogHeader title={title} onOpenChange={onOpenChange} />}>
         <TabList value={tab} onChange={setTab} hasDivider>
           <Tab value="library" label={t("mediaPicker.library")} />
           <Tab value="upload" label={t("mediaPicker.upload")} />
@@ -188,7 +188,7 @@ export function MediaPickerDialog({
             }}
           />
         )}
-      </VStack>
+      </DialogFrame>
     </Dialog>
   );
 }

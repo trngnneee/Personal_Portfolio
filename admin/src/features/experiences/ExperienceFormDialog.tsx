@@ -9,7 +9,6 @@ import { Selector } from "@astryxdesign/core/Selector";
 import { Switch } from "@astryxdesign/core/Switch";
 import { TextArea } from "@astryxdesign/core/TextArea";
 import { TextInput } from "@astryxdesign/core/TextInput";
-import { VStack } from "@astryxdesign/core/VStack";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MarkdownEditor } from "@/components/common/MarkdownEditor";
@@ -18,6 +17,7 @@ import { TagsInput } from "@/components/common/TagsInput";
 import { enumOptions } from "@/i18n";
 import { fieldErrors, lines, orNull, statusFor } from "@/lib/validation";
 import type { Experience } from "./types";
+import { DialogFrame } from "@/components/common/DialogFrame";
 
 export type ExperienceFormValues = ExperienceInput;
 
@@ -81,16 +81,34 @@ function ExperienceFormDialogBody({ onOpenChange, experience, onSubmit }: Props)
 
   return (
     <>
-      <VStack gap={4}>
-        <DialogHeader
-          title={experience ? t("experiences.form.editTitle") : t("experiences.form.createTitle")}
-          subtitle={
-            experience
-              ? `${experience.position} @ ${experience.company}`
-              : t("experiences.form.createSubtitle")
-          }
-          onOpenChange={onOpenChange}
-        />
+      <DialogFrame
+        header={
+          <DialogHeader
+            title={experience ? t("experiences.form.editTitle") : t("experiences.form.createTitle")}
+            subtitle={
+              experience
+                ? `${experience.position} @ ${experience.company}`
+                : t("experiences.form.createSubtitle")
+            }
+            onOpenChange={onOpenChange}
+          />
+        }
+        footer={
+          <HStack gap={2} hAlign="end">
+            <Button
+              label={t("common.cancel")}
+              variant="ghost"
+              onClick={() => onOpenChange(false)}
+            />
+            <Button
+              label={experience ? t("common.saveChanges") : t("experiences.form.submitCreate")}
+              variant="primary"
+              isLoading={isSaving}
+              onClick={() => void handleSubmit()}
+            />
+          </HStack>
+        }
+      >
         <FormLayout>
           <Grid gap={4} columns={2}>
             <TextInput
@@ -183,16 +201,7 @@ function ExperienceFormDialogBody({ onOpenChange, experience, onSubmit }: Props)
             labelSpacing="spread"
           />
         </FormLayout>
-        <HStack gap={2} hAlign="end">
-          <Button label={t("common.cancel")} variant="ghost" onClick={() => onOpenChange(false)} />
-          <Button
-            label={experience ? t("common.saveChanges") : t("experiences.form.submitCreate")}
-            variant="primary"
-            isLoading={isSaving}
-            onClick={() => void handleSubmit()}
-          />
-        </HStack>
-      </VStack>
+      </DialogFrame>
     </>
   );
 }

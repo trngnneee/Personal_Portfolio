@@ -6,12 +6,12 @@ import { HStack } from "@astryxdesign/core/HStack";
 import { Selector } from "@astryxdesign/core/Selector";
 import { Switch } from "@astryxdesign/core/Switch";
 import { TextInput } from "@astryxdesign/core/TextInput";
-import { VStack } from "@astryxdesign/core/VStack";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { enumOptions } from "@/i18n";
 import { fieldErrors, statusFor } from "@/lib/validation";
 import type { SocialLink } from "./types";
+import { DialogFrame } from "@/components/common/DialogFrame";
 
 export type SocialLinkFormValues = SocialLinkInput;
 
@@ -51,12 +51,30 @@ function SocialLinkFormDialogBody({ onOpenChange, link, onSubmit }: Props) {
 
   return (
     <>
-      <VStack gap={4}>
-        <DialogHeader
-          title={link ? t("socialLinks.form.editTitle") : t("socialLinks.form.createTitle")}
-          subtitle={link ? link.label : t("socialLinks.form.createSubtitle")}
-          onOpenChange={onOpenChange}
-        />
+      <DialogFrame
+        header={
+          <DialogHeader
+            title={link ? t("socialLinks.form.editTitle") : t("socialLinks.form.createTitle")}
+            subtitle={link ? link.label : t("socialLinks.form.createSubtitle")}
+            onOpenChange={onOpenChange}
+          />
+        }
+        footer={
+          <HStack gap={2} hAlign="end">
+            <Button
+              label={t("common.cancel")}
+              variant="ghost"
+              onClick={() => onOpenChange(false)}
+            />
+            <Button
+              label={link ? t("common.saveChanges") : t("socialLinks.form.submitCreate")}
+              variant="primary"
+              isLoading={isSaving}
+              onClick={() => void handleSubmit()}
+            />
+          </HStack>
+        }
+      >
         <FormLayout>
           <Selector
             label={t("socialLinks.form.platform")}
@@ -88,16 +106,7 @@ function SocialLinkFormDialogBody({ onOpenChange, link, onSubmit }: Props) {
             labelSpacing="spread"
           />
         </FormLayout>
-        <HStack gap={2} hAlign="end">
-          <Button label={t("common.cancel")} variant="ghost" onClick={() => onOpenChange(false)} />
-          <Button
-            label={link ? t("common.saveChanges") : t("socialLinks.form.submitCreate")}
-            variant="primary"
-            isLoading={isSaving}
-            onClick={() => void handleSubmit()}
-          />
-        </HStack>
-      </VStack>
+      </DialogFrame>
     </>
   );
 }

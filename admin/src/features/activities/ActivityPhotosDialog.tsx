@@ -16,6 +16,7 @@ import { thumb } from "@/lib/cloudinary";
 import { moveId } from "@/lib/resource";
 import { useAttachImage, useDetachImage, useReorderImages } from "./api";
 import type { Activity } from "./types";
+import { DialogFrame } from "@/components/common/DialogFrame";
 
 export function ActivityPhotosDialog({
   activity,
@@ -52,20 +53,32 @@ export function ActivityPhotosDialog({
 
   return (
     <Dialog isOpen onOpenChange={onOpenChange} purpose="form" width={720}>
-      <VStack gap={4}>
-        <DialogHeader
-          title={t("activities.photos.title")}
-          subtitle={t("activities.photos.subtitle", { name: activity.title })}
-          onOpenChange={onOpenChange}
-          endContent={
+      <DialogFrame
+        header={
+          <DialogHeader
+            title={t("activities.photos.title")}
+            subtitle={t("activities.photos.subtitle", { name: activity.title })}
+            onOpenChange={onOpenChange}
+            endContent={
+              <Button
+                label={t("activities.photos.add")}
+                size="sm"
+                icon={<PlusIcon />}
+                onClick={() => setIsPickerOpen(true)}
+              />
+            }
+          />
+        }
+        footer={
+          <HStack gap={2} hAlign="end">
             <Button
-              label={t("activities.photos.add")}
-              size="sm"
-              icon={<PlusIcon />}
-              onClick={() => setIsPickerOpen(true)}
+              label={t("activities.photos.done")}
+              variant="primary"
+              onClick={() => onOpenChange(false)}
             />
-          }
-        />
+          </HStack>
+        }
+      >
         {activity.images.length === 0 ? (
           <EmptyState
             isCompact
@@ -113,14 +126,7 @@ export function ActivityPhotosDialog({
             ))}
           </Grid>
         )}
-        <HStack gap={2} hAlign="end">
-          <Button
-            label={t("activities.photos.done")}
-            variant="primary"
-            onClick={() => onOpenChange(false)}
-          />
-        </HStack>
-      </VStack>
+      </DialogFrame>
       <MediaPickerDialog
         isOpen={isPickerOpen}
         onOpenChange={setIsPickerOpen}

@@ -10,6 +10,7 @@ import { enumLabel } from "@/i18n";
 import { formatDateTime } from "@/lib/format";
 import { STATUS_VARIANT } from "./MessagesPage.constants";
 import type { Message } from "./types";
+import { DialogFrame } from "@/components/common/DialogFrame";
 
 /** Read-only detail view. Opening it marks a new message as read (handled by the page). */
 export function MessageDialog({
@@ -25,18 +26,37 @@ export function MessageDialog({
   if (!message) return null;
   return (
     <Dialog isOpen onOpenChange={onOpenChange} width={560}>
-      <VStack gap={4}>
-        <DialogHeader
-          title={message.subject}
-          subtitle={`${message.name} <${message.email}>`}
-          onOpenChange={onOpenChange}
-          endContent={
-            <StatusLabel
-              variant={STATUS_VARIANT[message.status]}
-              label={enumLabel("messageStatus", message.status)}
+      <DialogFrame
+        header={
+          <DialogHeader
+            title={message.subject}
+            subtitle={`${message.name} <${message.email}>`}
+            onOpenChange={onOpenChange}
+            endContent={
+              <StatusLabel
+                variant={STATUS_VARIANT[message.status]}
+                label={enumLabel("messageStatus", message.status)}
+              />
+            }
+          />
+        }
+        footer={
+          <HStack gap={2} hAlign="end">
+            {message.status !== "archived" && (
+              <Button
+                label={t("messages.archive")}
+                variant="ghost"
+                onClick={() => onArchive(message)}
+              />
+            )}
+            <Button
+              label={t("messages.reply")}
+              variant="primary"
+              href={`mailto:${message.email}?subject=${encodeURIComponent(`Re: ${message.subject}`)}`}
             />
-          }
-        />
+          </HStack>
+        }
+      >
         <VStack gap={1}>
           <Text type="supporting" color="secondary">
             {t("messages.dialog.receivedAt", { date: formatDateTime(message.createdAt) })}
@@ -52,21 +72,7 @@ export function MessageDialog({
             {message.message}
           </Text>
         </Section>
-        <HStack gap={2} hAlign="end">
-          {message.status !== "archived" && (
-            <Button
-              label={t("messages.archive")}
-              variant="ghost"
-              onClick={() => onArchive(message)}
-            />
-          )}
-          <Button
-            label={t("messages.reply")}
-            variant="primary"
-            href={`mailto:${message.email}?subject=${encodeURIComponent(`Re: ${message.subject}`)}`}
-          />
-        </HStack>
-      </VStack>
+      </DialogFrame>
     </Dialog>
   );
 }

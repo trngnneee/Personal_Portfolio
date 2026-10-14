@@ -15,7 +15,6 @@ import { Selector } from "@astryxdesign/core/Selector";
 import { Switch } from "@astryxdesign/core/Switch";
 import { TextArea } from "@astryxdesign/core/TextArea";
 import { TextInput } from "@astryxdesign/core/TextInput";
-import { VStack } from "@astryxdesign/core/VStack";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MarkdownEditor } from "@/components/common/MarkdownEditor";
@@ -24,6 +23,7 @@ import { TagsInput } from "@/components/common/TagsInput";
 import { enumOptions } from "@/i18n";
 import { fieldErrors, lines, orNull, statusFor } from "@/lib/validation";
 import type { Project } from "./types";
+import { DialogFrame } from "@/components/common/DialogFrame";
 
 export type ProjectFormValues = ProjectInput;
 
@@ -98,12 +98,30 @@ function ProjectFormDialogBody({ onOpenChange, project, onSubmit, techSuggestion
 
   return (
     <>
-      <VStack gap={4}>
-        <DialogHeader
-          title={project ? t("projects.form.editTitle") : t("projects.form.createTitle")}
-          subtitle={project ? project.title : t("projects.form.createSubtitle")}
-          onOpenChange={onOpenChange}
-        />
+      <DialogFrame
+        header={
+          <DialogHeader
+            title={project ? t("projects.form.editTitle") : t("projects.form.createTitle")}
+            subtitle={project ? project.title : t("projects.form.createSubtitle")}
+            onOpenChange={onOpenChange}
+          />
+        }
+        footer={
+          <HStack gap={2} hAlign="end">
+            <Button
+              label={t("common.cancel")}
+              variant="ghost"
+              onClick={() => onOpenChange(false)}
+            />
+            <Button
+              label={project ? t("common.saveChanges") : t("projects.form.submitCreate")}
+              variant="primary"
+              isLoading={isSaving}
+              onClick={() => void handleSubmit()}
+            />
+          </HStack>
+        }
+      >
         <FormLayout>
           <Grid gap={4} columns={2}>
             <TextInput
@@ -237,16 +255,7 @@ function ProjectFormDialogBody({ onOpenChange, project, onSubmit, techSuggestion
             labelSpacing="spread"
           />
         </FormLayout>
-        <HStack gap={2} hAlign="end">
-          <Button label={t("common.cancel")} variant="ghost" onClick={() => onOpenChange(false)} />
-          <Button
-            label={project ? t("common.saveChanges") : t("projects.form.submitCreate")}
-            variant="primary"
-            isLoading={isSaving}
-            onClick={() => void handleSubmit()}
-          />
-        </HStack>
-      </VStack>
+      </DialogFrame>
     </>
   );
 }

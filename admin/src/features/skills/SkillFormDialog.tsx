@@ -8,12 +8,12 @@ import { NumberInput } from "@astryxdesign/core/NumberInput";
 import { Selector } from "@astryxdesign/core/Selector";
 import { Switch } from "@astryxdesign/core/Switch";
 import { TextInput } from "@astryxdesign/core/TextInput";
-import { VStack } from "@astryxdesign/core/VStack";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { enumOptions } from "@/i18n";
 import { fieldErrors, orNull, statusFor } from "@/lib/validation";
 import type { Skill } from "./types";
+import { DialogFrame } from "@/components/common/DialogFrame";
 
 export type SkillFormValues = SkillInput;
 
@@ -59,12 +59,30 @@ function SkillFormDialogBody({ onOpenChange, skill, onSubmit }: Props) {
 
   return (
     <>
-      <VStack gap={4}>
-        <DialogHeader
-          title={skill ? t("skills.form.editTitle") : t("skills.form.createTitle")}
-          subtitle={skill ? skill.name : t("skills.form.createSubtitle")}
-          onOpenChange={onOpenChange}
-        />
+      <DialogFrame
+        header={
+          <DialogHeader
+            title={skill ? t("skills.form.editTitle") : t("skills.form.createTitle")}
+            subtitle={skill ? skill.name : t("skills.form.createSubtitle")}
+            onOpenChange={onOpenChange}
+          />
+        }
+        footer={
+          <HStack gap={2} hAlign="end">
+            <Button
+              label={t("common.cancel")}
+              variant="ghost"
+              onClick={() => onOpenChange(false)}
+            />
+            <Button
+              label={skill ? t("common.saveChanges") : t("skills.form.submitCreate")}
+              variant="primary"
+              isLoading={isSaving}
+              onClick={() => void handleSubmit()}
+            />
+          </HStack>
+        }
+      >
         <FormLayout>
           <Grid gap={4} columns={2}>
             <TextInput
@@ -109,16 +127,7 @@ function SkillFormDialogBody({ onOpenChange, skill, onSubmit }: Props) {
             labelSpacing="spread"
           />
         </FormLayout>
-        <HStack gap={2} hAlign="end">
-          <Button label={t("common.cancel")} variant="ghost" onClick={() => onOpenChange(false)} />
-          <Button
-            label={skill ? t("common.saveChanges") : t("skills.form.submitCreate")}
-            variant="primary"
-            isLoading={isSaving}
-            onClick={() => void handleSubmit()}
-          />
-        </HStack>
-      </VStack>
+      </DialogFrame>
     </>
   );
 }

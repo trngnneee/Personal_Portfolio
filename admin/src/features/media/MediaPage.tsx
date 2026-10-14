@@ -37,6 +37,7 @@ import { formatBytes } from "@/lib/format";
 import { useDeleteMedia, useMediaList, useUpdateMediaAlt } from "./api";
 import { MEDIA_FOLDERS, type MediaItem } from "./types";
 import { UploadForm } from "./UploadForm";
+import { DialogFrame } from "@/components/common/DialogFrame";
 
 const fileName = (m: MediaItem) => m.url.split("/").pop() ?? String(m.id);
 
@@ -257,13 +258,16 @@ export function MediaPage() {
       </Card>
 
       <Dialog isOpen={isUploadOpen} onOpenChange={setIsUploadOpen} purpose="form" width={480}>
-        <VStack gap={4}>
-          <DialogHeader title={t("media.uploadDialog.title")} onOpenChange={setIsUploadOpen} />
+        <DialogFrame
+          header={
+            <DialogHeader title={t("media.uploadDialog.title")} onOpenChange={setIsUploadOpen} />
+          }
+        >
           <UploadForm
             onUploaded={() => setIsUploadOpen(false)}
             onCancel={() => setIsUploadOpen(false)}
           />
-        </VStack>
+        </DialogFrame>
       </Dialog>
       <AltDialog item={editingAlt} onClose={() => setEditingAlt(null)} />
       {confirm.element}
@@ -305,12 +309,26 @@ function AltDialog({ item, onClose }: { item: MediaItem | null; onClose: () => v
       purpose="form"
       width={440}
     >
-      <VStack gap={4}>
-        <DialogHeader
-          title={t("media.altDialog.title")}
-          subtitle={item ? fileName(item) : undefined}
-          onOpenChange={() => onClose()}
-        />
+      <DialogFrame
+        header={
+          <DialogHeader
+            title={t("media.altDialog.title")}
+            subtitle={item ? fileName(item) : undefined}
+            onOpenChange={() => onClose()}
+          />
+        }
+        footer={
+          <HStack gap={2} hAlign="end">
+            <Button label={t("common.cancel")} variant="ghost" onClick={onClose} />
+            <Button
+              label={t("common.saveChanges")}
+              variant="primary"
+              isLoading={update.isPending}
+              onClick={handleSave}
+            />
+          </HStack>
+        }
+      >
         <TextInput
           label={t("media.altDialog.alt")}
           value={alt}
@@ -318,16 +336,7 @@ function AltDialog({ item, onClose }: { item: MediaItem | null; onClose: () => v
           onEnter={handleSave}
           hasAutoFocus
         />
-        <HStack gap={2} hAlign="end">
-          <Button label={t("common.cancel")} variant="ghost" onClick={onClose} />
-          <Button
-            label={t("common.saveChanges")}
-            variant="primary"
-            isLoading={update.isPending}
-            onClick={handleSave}
-          />
-        </HStack>
-      </VStack>
+      </DialogFrame>
     </Dialog>
   );
 }

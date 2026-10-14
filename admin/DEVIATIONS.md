@@ -46,11 +46,12 @@ i18n en/vi with `enumLabel`, `@/lib/format`, heroicons only, no layout `<div>`s)
 
 ## Custom components (not in Astryx)
 
-| Component                                                   | Built from                                                                          | Why custom                                                                                                   |
-| ----------------------------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `components/common/MediaPicker.tsx` (+ `MediaPickerDialog`) | `Field`, `Thumbnail`, `Dialog`, `TabList`, `Pagination`, `UploadForm` (`FileInput`) | Pick-from-library-or-upload is app-specific (searched: `npx astryx search "file upload"` → only `FileInput`) |
-| `components/common/MarkdownEditor.tsx`                      | `TabList`, `TextArea` (ref for caret), `Card`, `@portfolio/markdown`                | Preview must use the **public site's** renderer (PROMPT §7.2); Astryx `Markdown` is a different renderer     |
-| `components/common/TagsInput.tsx`                           | `Tokenizer` with `hasCreate` and a static search source                             | Thin adapter: string[] ↔ `SearchableItem[]`                                                                  |
+| Component                                                   | Built from                                                                                      | Why custom                                                                                                                                                                   |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/common/MediaPicker.tsx` (+ `MediaPickerDialog`) | `Field`, `Thumbnail`, `Dialog`, `TabList`, `Pagination`, `UploadForm` (`FileInput`)             | Pick-from-library-or-upload is app-specific (searched: `npx astryx search "file upload"` → only `FileInput`)                                                                 |
+| `components/common/MarkdownEditor.tsx`                      | `TabList`, `TextArea` (ref for caret), `Card`, `@portfolio/markdown`                            | Preview must use the **public site's** renderer (PROMPT §7.2); Astryx `Markdown` is a different renderer                                                                     |
+| `components/common/TagsInput.tsx`                           | `Tokenizer` with `hasCreate` and a static search source                                         | Thin adapter: string[] ↔ `SearchableItem[]`                                                                                                                                  |
+| `components/common/DialogFrame.tsx`                         | Astryx `Layout` + `LayoutContent` + `LayoutFooter` (the 0.7.0 `DialogScrollingContent` pattern) | The doc's `Dialog > VStack` layout clips long forms in 0.7.0 (the dialog is a flex container); this keeps header/actions pinned and scrolls the middle. Used by every dialog |
 
 ## Escape hatches
 

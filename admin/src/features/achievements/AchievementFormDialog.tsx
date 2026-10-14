@@ -9,13 +9,13 @@ import { Selector } from "@astryxdesign/core/Selector";
 import { Switch } from "@astryxdesign/core/Switch";
 import { TextArea } from "@astryxdesign/core/TextArea";
 import { TextInput } from "@astryxdesign/core/TextInput";
-import { VStack } from "@astryxdesign/core/VStack";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MediaPicker, type MediaRef } from "@/components/common/MediaPicker";
 import { enumOptions } from "@/i18n";
 import { fieldErrors, orNull, statusFor } from "@/lib/validation";
 import type { Achievement } from "./types";
+import { DialogFrame } from "@/components/common/DialogFrame";
 
 export type AchievementFormValues = AchievementInput;
 
@@ -77,14 +77,32 @@ function AchievementFormDialogBody({ onOpenChange, achievement, onSubmit }: Prop
 
   return (
     <>
-      <VStack gap={4}>
-        <DialogHeader
-          title={
-            achievement ? t("achievements.form.editTitle") : t("achievements.form.createTitle")
-          }
-          subtitle={achievement ? achievement.title : t("achievements.form.createSubtitle")}
-          onOpenChange={onOpenChange}
-        />
+      <DialogFrame
+        header={
+          <DialogHeader
+            title={
+              achievement ? t("achievements.form.editTitle") : t("achievements.form.createTitle")
+            }
+            subtitle={achievement ? achievement.title : t("achievements.form.createSubtitle")}
+            onOpenChange={onOpenChange}
+          />
+        }
+        footer={
+          <HStack gap={2} hAlign="end">
+            <Button
+              label={t("common.cancel")}
+              variant="ghost"
+              onClick={() => onOpenChange(false)}
+            />
+            <Button
+              label={achievement ? t("common.saveChanges") : t("achievements.form.submitCreate")}
+              variant="primary"
+              isLoading={isSaving}
+              onClick={() => void handleSubmit()}
+            />
+          </HStack>
+        }
+      >
         <FormLayout>
           <Selector
             label={t("achievements.form.type")}
@@ -163,16 +181,7 @@ function AchievementFormDialogBody({ onOpenChange, achievement, onSubmit }: Prop
             labelSpacing="spread"
           />
         </FormLayout>
-        <HStack gap={2} hAlign="end">
-          <Button label={t("common.cancel")} variant="ghost" onClick={() => onOpenChange(false)} />
-          <Button
-            label={achievement ? t("common.saveChanges") : t("achievements.form.submitCreate")}
-            variant="primary"
-            isLoading={isSaving}
-            onClick={() => void handleSubmit()}
-          />
-        </HStack>
-      </VStack>
+      </DialogFrame>
     </>
   );
 }

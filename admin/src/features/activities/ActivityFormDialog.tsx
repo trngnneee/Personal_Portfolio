@@ -8,11 +8,11 @@ import { HStack } from "@astryxdesign/core/HStack";
 import { Switch } from "@astryxdesign/core/Switch";
 import { TextArea } from "@astryxdesign/core/TextArea";
 import { TextInput } from "@astryxdesign/core/TextInput";
-import { VStack } from "@astryxdesign/core/VStack";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { fieldErrors, orNull, statusFor } from "@/lib/validation";
 import type { Activity } from "./types";
+import { DialogFrame } from "@/components/common/DialogFrame";
 
 export type ActivityFormValues = ActivityInput;
 
@@ -70,12 +70,30 @@ function ActivityFormDialogBody({ onOpenChange, activity, onSubmit }: Props) {
 
   return (
     <>
-      <VStack gap={4}>
-        <DialogHeader
-          title={activity ? t("activities.form.editTitle") : t("activities.form.createTitle")}
-          subtitle={activity ? activity.title : t("activities.form.createSubtitle")}
-          onOpenChange={onOpenChange}
-        />
+      <DialogFrame
+        header={
+          <DialogHeader
+            title={activity ? t("activities.form.editTitle") : t("activities.form.createTitle")}
+            subtitle={activity ? activity.title : t("activities.form.createSubtitle")}
+            onOpenChange={onOpenChange}
+          />
+        }
+        footer={
+          <HStack gap={2} hAlign="end">
+            <Button
+              label={t("common.cancel")}
+              variant="ghost"
+              onClick={() => onOpenChange(false)}
+            />
+            <Button
+              label={activity ? t("common.saveChanges") : t("activities.form.submitCreate")}
+              variant="primary"
+              isLoading={isSaving}
+              onClick={() => void handleSubmit()}
+            />
+          </HStack>
+        }
+      >
         <FormLayout>
           <TextInput
             label={t("activities.form.title")}
@@ -134,16 +152,7 @@ function ActivityFormDialogBody({ onOpenChange, activity, onSubmit }: Props) {
             labelSpacing="spread"
           />
         </FormLayout>
-        <HStack gap={2} hAlign="end">
-          <Button label={t("common.cancel")} variant="ghost" onClick={() => onOpenChange(false)} />
-          <Button
-            label={activity ? t("common.saveChanges") : t("activities.form.submitCreate")}
-            variant="primary"
-            isLoading={isSaving}
-            onClick={() => void handleSubmit()}
-          />
-        </HStack>
-      </VStack>
+      </DialogFrame>
     </>
   );
 }
