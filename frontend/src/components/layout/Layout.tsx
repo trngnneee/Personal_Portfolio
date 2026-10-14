@@ -5,6 +5,7 @@ import { PageSkeleton } from "@/components/ui/Skeleton";
 import { JsonLd } from "@/lib/seo";
 import { useSite } from "@/lib/queries";
 import { SITE_URL } from "@/config/routes";
+import { SpideyWidget } from "@/features/assistant";
 import { Footer } from "./Footer";
 import { Navbar } from "./Navbar";
 
@@ -33,6 +34,8 @@ export function Layout() {
         )}
       </main>
       <Footer />
+      {/* Self-contained: bot down or unset never affects the page. */}
+      <SpideyWidget />
       {data?.profile && (
         <JsonLd
           data={{
