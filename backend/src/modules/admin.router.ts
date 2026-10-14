@@ -1,5 +1,6 @@
 import { Router } from "express";
 import type { AppContext } from "../context.js";
+import { createClientIp } from "../lib/client-ip.js";
 import { createLoginLimiter } from "../middleware/rate-limit.js";
 import { requireAuth } from "../middleware/require-auth.js";
 import { registerActivities } from "./activities/admin.router.js";
@@ -30,7 +31,11 @@ export function createAdminRouter(ctx: AppContext) {
   registerSystem(ctx, protectedRoutes);
 
   const router = Router();
-  router.post("/auth/login", createLoginLimiter(), loginHandler(ctx));
+  router.post(
+    "/auth/login",
+    createLoginLimiter(createClientIp(ctx.env.CLIENT_IP_HEADER)),
+    loginHandler(ctx),
+  );
   router.use(requireAuth(ctx), protectedRoutes);
 
   return { router, protectedRoutes };

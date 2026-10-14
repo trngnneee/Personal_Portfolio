@@ -1,0 +1,25 @@
+HTTP/2 404 
+date: Wed, 14 Oct 2026 13:45:43 GMT
+content-type: application/json; charset=utf-8
+content-security-policy: default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests
+cross-origin-opener-policy: same-origin
+cross-origin-resource-policy: cross-origin
+etag: W/"3a-yI6/51oUxkT/a2qlAM5xdtd5s1o"
+origin-agent-cluster: ?1
+referrer-policy: no-referrer
+rndr-id: ebb11e0b-fc2b-4477
+server: cloudflare
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: Origin
+vary: Accept-Encoding
+x-content-type-options: nosniff
+x-dns-prefetch-control: off
+x-download-options: noopen
+x-frame-options: SAMEORIGIN
+x-permitted-cross-domain-policies: none
+x-render-origin-server: Render
+x-xss-protection: 0
+cf-cache-status: DYNAMIC
+cf-ray: a4a706b0db6098f5-HKG
+alt-svc: h3=":443"; ma=86400
+

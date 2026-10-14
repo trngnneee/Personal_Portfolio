@@ -27,9 +27,10 @@ export function createApp(ctx: AppContext): Express {
     res.set("Cache-Control", "no-store");
     try {
       await db.execute(sql`SELECT 1`);
-      res.json({ ok: true, db: "up" });
+      res.json({ ok: true });
     } catch {
-      res.status(503).json({ ok: false, db: "down" });
+      // Status code is all Render's health check needs; don't describe the DB tier to the public.
+      res.status(503).json({ ok: false });
     }
   });
   app.get("/sitemap.xml", sitemapHandler(ctx));

@@ -469,6 +469,11 @@ describe("headers, CORS and error handling", () => {
     expect(res.headers["strict-transport-security"]).toBeDefined();
   });
 
+  it("health check does not describe the database tier", async () => {
+    const res = await request(t.app).get("/healthz").expect(200);
+    expect(res.body).toEqual({ ok: true });
+  });
+
   it("only reflects allowlisted origins", async () => {
     const good = await request(t.app)
       .get("/api/v1/public/site")

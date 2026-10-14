@@ -80,6 +80,7 @@ CI (`.github/workflows/ci.yml`) runs audit → lint → typecheck → tests (Pos
 | `JWT_SECRET`                                         | ✅       | ≥ 32 bytes. `node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"`                        |
 | `IP_HASH_SALT`                                       | ✅       | Salt for hashing contact-form IPs                                                                                   |
 | `CORS_ORIGINS`                                       | ✅       | Comma-separated: site + admin origins                                                                               |
+| `CLIENT_IP_HEADER`                                   |          | Header with the real client IP (Render/Cloudflare: `cf-connecting-ip`). Empty → `req.ip`. Keys rate limits          |
 | `PUBLIC_SITE_URL` / `PUBLIC_API_URL`                 |          | Sitemap/RSS links; dev upload URLs                                                                                  |
 | `CLOUDINARY_CLOUD_NAME` / `_API_KEY` / `_API_SECRET` | prod ✅  | Media storage                                                                                                       |
 | `CLOUDINARY_FOLDER`                                  |          | Default `portfolio`                                                                                                 |
@@ -173,8 +174,9 @@ git push origin main
    override the homelab's `*.trngnneee.io.vn` wildcard — make sure nothing else claims `@` (Render also adds `www`).
    Only the public site has a custom domain: Render allows 2 custom domains without a payment method, and the apex
    plus its automatic `www` redirect use both. The API (`https://portfolio-api-5hvt.onrender.com` — Render added the `-5hvt` suffix) and the admin
-   (`https://portfolio-admin.onrender.com`) keep their Render URLs — if Render added a suffix to either hostname,
-   replace it in `render.yaml` (API: `VITE_API_URL`, `PUBLIC_API_URL`, CSP, sitemap rewrite; admin: `CORS_ORIGINS`).
+   (`https://portfolio-admin.onrender.com`) keep their Render URLs — if Render added a suffix to the API hostname,
+   replace it in `render.yaml` (`VITE_API_URL`, `PUBLIC_API_URL`, CSP, sitemap rewrite). Only the admin's custom
+   domain belongs in `CORS_ORIGINS` — never a `*.onrender.com` default (released names can be claimed by others).
 
 5. **Create the admin account and seed content — from your machine.** The free plan has no Render Shell, so these
    one-off commands connect to Supabase directly. `read -rs` keeps the secrets out of your shell history; values
@@ -200,7 +202,7 @@ git push origin main
 6. Verify:
 
    ```bash
-   curl -s https://portfolio-api-5hvt.onrender.com/healthz          # {"ok":true,"db":"up"}
+   curl -s https://portfolio-api-5hvt.onrender.com/healthz          # {"ok":true}
    curl -sI https://trngnneee.io.vn | grep -i content-security-policy
    curl -s https://trngnneee.io.vn/sitemap.xml | head
    ```

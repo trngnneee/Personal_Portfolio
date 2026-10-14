@@ -1,0 +1,20 @@
+HTTP/2 200 
+date: Wed, 14 Oct 2026 13:46:57 GMT
+content-type: text/html; charset=utf-8
+cache-control: public, max-age=0, s-maxage=300
+cf-cache-status: EXPIRED
+etag: W/"ed42420ad8e951934e41a18352ffb18e"
+content-security-policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://res.cloudinary.com https://cdn.jsdelivr.net; connect-src 'self' https://portfolio-api-5hvt.onrender.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
+last-modified: Wed, 14 Oct 2026 11:01:47 UTC
+permissions-policy: camera=(), microphone=(), geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+rndr-id: 1ad4ce0b-d300-42a3
+server: cloudflare
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: Accept-Encoding
+vary: Accept-Encoding
+x-content-type-options: nosniff
+x-frame-options: DENY
+cf-ray: a4a7087cacef4ba3-HKG
+alt-svc: h3=":443"; ma=86400
+

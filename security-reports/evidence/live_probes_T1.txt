@@ -1,0 +1,317 @@
+### GET /healthz
+status=200 time=0.584053s size=21
+content-type: application/json; charset=utf-8
+cache-control: no-store
+vary: Origin
+vary: Accept-Encoding
+{"ok":true,"db":"up"}
+---
+### GET /sitemap.xml
+status=200 time=0.369896s size=440
+content-type: application/xml; charset=utf-8
+cache-control: public, max-age=3600
+vary: Origin
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://trngnneee.io.vn/</loc></url>
+  <url><loc>https://trngnneee.io.vn/about</loc></url>
+  <url><loc>https
+---
+### GET /api/v1/admin/auth/me (no auth)
+status=401 time=0.340744s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### GET /api/v1/admin/dashboard (no auth)
+status=401 time=1.319456s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### GET /api/v1/admin/projects (no auth)
+status=401 time=0.357771s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### GET /api/v1/admin/skills (no auth)
+status=401 time=0.324075s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### GET /api/v1/admin/experiences (no auth)
+status=401 time=0.230187s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### GET /api/v1/admin/achievements (no auth)
+status=401 time=0.211830s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### GET /api/v1/admin/social-links (no auth)
+status=401 time=0.327852s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### GET /api/v1/admin/activities (no auth)
+status=401 time=0.283526s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### GET /api/v1/admin/blog (no auth)
+status=401 time=0.305793s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### GET /api/v1/admin/media (no auth)
+status=401 time=0.206885s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### GET /api/v1/admin/messages (no auth)
+status=401 time=0.194526s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### GET /api/v1/admin/sections (no auth)
+status=401 time=0.247956s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### GET /api/v1/admin/profile (no auth)
+status=401 time=0.342227s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### GET /api/v1/admin/export (no auth)
+status=401 time=0.223425s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### GET /api/v1/admin/nonexistent-route (no auth)
+status=401 time=0.246575s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### POST /api/v1/admin/projects (no auth)
+status=401 time=0.261214s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Unauthorized"}}
+---
+### OPTIONS preflight Origin=evil.com
+status=204 time=0.409402s size=0
+access-control-allow-methods: GET,HEAD,PUT,PATCH,POST,DELETE
+vary: Origin, Access-Control-Request-Headers
+
+---
+### OPTIONS preflight Origin=trngnneee.io.vn
+status=204 time=0.621066s size=0
+access-control-allow-methods: GET,HEAD,PUT,PATCH,POST,DELETE
+access-control-allow-origin: https://trngnneee.io.vn
+vary: Origin, Access-Control-Request-Headers
+
+---
+### GET /api/v1/public/site Origin=admin
+status=200 time=1.066967s size=34050
+content-type: application/json; charset=utf-8
+access-control-allow-origin: https://admin.trngnneee.io.vn
+cache-control: public, max-age=60, stale-while-revalidate=600
+vary: Origin
+vary: Accept-Encoding
+{"sections":[{"key":"hero","navLabel":"Home","heading":"whoami","subheading":"","route":"/"},{"key":"about","navLabel":"About","heading":"About me","subheading":"cat about.md","route":"/about"},{"key":"experience","navLa
+---
+### TRACE /api/v1/public/site
+status=405 time=0.203403s size=155
+content-type: text/html
+<html>
+<head><title>405 Not Allowed</title></head>
+<body>
+<center><h1>405 Not Allowed</h1></center>
+<hr><center>cloudflare</center>
+</body>
+</html>
+
+---
+### DELETE /healthz
+status=404 time=0.269072s size=58
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"not_found","message":"Route not found"}}
+---
+### POST login malformed body
+status=400 time=0.510012s size=436
+content-type: application/json; charset=utf-8
+ratelimit: "10-in-15min"; r=9; t=900
+ratelimit-policy: "10-in-15min"; q=10; w=900; pk=:ZmIwNDE4YWM4YTE5:
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"validation_error","message":"Invalid input","details":[{"origin":"string","code":"invalid_format","format":"email","pattern":"/^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][
+---
+### POST login bad email format
+status=400 time=0.226730s size=309
+content-type: application/json; charset=utf-8
+ratelimit: "10-in-15min"; r=9; t=900
+ratelimit-policy: "10-in-15min"; q=10; w=900; pk=:ZjFhOGNhOThiN2U5:
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"validation_error","message":"Invalid input","details":[{"origin":"string","code":"invalid_format","format":"email","pattern":"/^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][
+---
+### POST login wrong-email-wrong-pass
+status=401 time=0.520826s size=65
+content-type: application/json; charset=utf-8
+ratelimit: "10-in-15min"; r=9; t=900
+ratelimit-policy: "10-in-15min"; q=10; w=900; pk=:OTA0MTExMmZlNTRh:
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Invalid credentials"}}
+---
+### POST login right-email-wrong-pass
+status=401 time=0.692386s size=65
+content-type: application/json; charset=utf-8
+ratelimit: "10-in-15min"; r=8; t=898
+ratelimit-policy: "10-in-15min"; q=10; w=900; pk=:ZmIwNDE4YWM4YTE5:
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"unauthorized","message":"Invalid credentials"}}
+---
+### POST contact invalid (short name)
+status=400 time=0.326058s size=521
+content-type: application/json; charset=utf-8
+ratelimit: "5-in-15min"; r=4; t=900
+ratelimit-policy: "5-in-15min"; q=5; w=900; pk=:ZmIwNDE4YWM4YTE5:
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"validation_error","message":"Invalid input","details":[{"origin":"string","code":"too_small","minimum":2,"inclusive":true,"path":["name"],"message":"Too small: expected string to have >=2 characters"},{
+---
+### POST contact honeypot #1
+status=201 time=0.330146s size=11
+content-type: application/json; charset=utf-8
+ratelimit: "5-in-15min"; r=3; t=900
+ratelimit-policy: "5-in-15min"; q=5; w=900; pk=:ZmIwNDE4YWM4YTE5:
+vary: Origin
+vary: Accept-Encoding
+{"ok":true}
+---
+### POST contact honeypot #2
+status=201 time=0.310818s size=11
+content-type: application/json; charset=utf-8
+ratelimit: "5-in-15min"; r=4; t=900
+ratelimit-policy: "5-in-15min"; q=5; w=900; pk=:ZjFhOGNhOThiN2U5:
+vary: Origin
+vary: Accept-Encoding
+{"ok":true}
+---
+### POST contact honeypot #3
+status=201 time=0.336318s size=11
+content-type: application/json; charset=utf-8
+ratelimit: "5-in-15min"; r=2; t=899
+ratelimit-policy: "5-in-15min"; q=5; w=900; pk=:ZmIwNDE4YWM4YTE5:
+vary: Origin
+vary: Accept-Encoding
+{"ok":true}
+---
+### POST contact honeypot #4
+status=201 time=0.272470s size=11
+content-type: application/json; charset=utf-8
+ratelimit: "5-in-15min"; r=4; t=900
+ratelimit-policy: "5-in-15min"; q=5; w=900; pk=:OTA0MTExMmZlNTRh:
+vary: Origin
+vary: Accept-Encoding
+{"ok":true}
+---
+### POST contact honeypot #5
+status=201 time=0.511291s size=11
+content-type: application/json; charset=utf-8
+ratelimit: "5-in-15min"; r=1; t=898
+ratelimit-policy: "5-in-15min"; q=5; w=900; pk=:ZmIwNDE4YWM4YTE5:
+vary: Origin
+vary: Accept-Encoding
+{"ok":true}
+---
+### POST contact honeypot #6
+status=201 time=0.411630s size=11
+content-type: application/json; charset=utf-8
+ratelimit: "5-in-15min"; r=3; t=899
+ratelimit-policy: "5-in-15min"; q=5; w=900; pk=:OTA0MTExMmZlNTRh:
+vary: Origin
+vary: Accept-Encoding
+{"ok":true}
+---
+### POST contact 1.2MB body
+status=413 size=69
+{"error":{"code":"bad_request","message":"request entity too large"}}
+---
+### GET /api/v1/public/blog
+status=404 time=0.328872s size=52
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"not_found","message":"Not found"}}
+---
+### GET blog q=sqli-payload
+status=404 time=0.393941s size=52
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"not_found","message":"Not found"}}
+---
+### GET blog q=script-tag
+status=404 time=0.481497s size=52
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"not_found","message":"Not found"}}
+---
+### GET blog page=0
+status=404 time=0.521269s size=52
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"not_found","message":"Not found"}}
+---
+### GET blog page=99999999999
+status=404 time=0.538902s size=52
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"not_found","message":"Not found"}}
+---
+### GET /api/v1/public/blog/rss.xml
+status=404 time=0.288828s size=52
+content-type: application/json; charset=utf-8
+vary: Origin
+vary: Accept-Encoding
+{"error":{"code":"not_found","message":"Not found"}}
+---

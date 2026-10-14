@@ -9,6 +9,7 @@ import {
 import { Router, type RequestHandler } from "express";
 import type { AppContext } from "../../context.js";
 import { contactMessages } from "../../db/schema.js";
+import { createClientIp } from "../../lib/client-ip.js";
 import { notFound } from "../../middleware/error.js";
 import { createContactLimiter } from "../../middleware/rate-limit.js";
 import { isSectionEnabled, requireSection } from "../../middleware/require-section.js";
@@ -24,6 +25,7 @@ const BLOG_PAGE_SIZE = 10;
 export function createPublicRouter(ctx: AppContext): Router {
   const { db, env, mailer } = ctx;
   const router = Router();
+  const clientIp = createClientIp(env.CLIENT_IP_HEADER);
   const blogOn = requireSection(db, "blog");
 
   router.get("/site", async (_req, res) => {
@@ -120,7 +122,7 @@ ${items}
   router.post(
     "/contact",
     requireSection(db, "contact"),
-    createContactLimiter(),
+    createContactLimiter(clientIp),
     async (req, res) => {
       const input = parseBody(contactMessageInputSchema, req);
       // Honeypot filled → pretend success, store nothing.
@@ -129,7 +131,7 @@ ${items}
         return;
       }
       const ipHash = createHash("sha256")
-        .update(`${env.IP_HASH_SALT}:${req.ip ?? ""}`)
+        .update(`${env.IP_HASH_SALT}:${clientIp(req)}`)
         .digest("hex");
       await db.insert(contactMessages).values({
         name: input.name,

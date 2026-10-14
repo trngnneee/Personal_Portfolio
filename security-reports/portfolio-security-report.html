@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portfolio Pentest Report</title>
+<meta name="description" content="Security assessment 2026-10-14 of the trngnneee portfolio: API, public site and admin dashboard — 0 critical, 1 medium, 2 low.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* Design plan — audit-masthead document: a report that reads like signed assessment paperwork.
+   Color: warm-ink neutrals (blue-biased grey, never pure), severity semantics separate from accent (amber=med, steel=low, slate=info, teal=verified strength).
+   Type: Spectral for the masthead/section display (report gravitas); Inter body (the portfolio's own face); JetBrains Mono for headers, vectors, IDs.
+   Layout: centered 74rem document column, marginalia-style target chips, findings as severity-striped cards. */
+:root{
+  --bg:#f7f6f3; --surface:#ffffff; --ink:#1c2230; --ink-soft:#4a5468; --line:#dcd9d0; --line-strong:#c4c0b4;
+  --accent:#0f5e5a; --accent-soft:#e2efed;
+  --sev-crit:#8c1d18; --sev-high:#b3400f; --sev-med:#9a6700; --sev-med-bg:#fff3d6; --sev-low:#2f5e8f; --sev-low-bg:#e7eff8; --sev-info:#565d6b; --sev-info-bg:#eceef1;
+  --ok:#1c6b4c; --ok-bg:#e3f2ea;
+  --code-bg:#10141c; --code-fg:#d7dce6; --code-dim:#8a93a6; --code-hl:#ffcf7d;
+  --font-display:"Spectral", Georgia, "Times New Roman", serif;
+  --font-body:"Inter", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --s1:.35rem; --s2:.7rem; --s3:1.15rem; --s4:2rem; --s5:3.2rem;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#12151c; --surface:#191e28; --ink:#e7eaf1; --ink-soft:#a5adbf; --line:#2b3140; --line-strong:#3a4256;
+  --accent:#66c2ba; --accent-soft:#173432;
+  --sev-med:#e8b34b; --sev-med-bg:#33290f; --sev-low:#7fadde; --sev-low-bg:#17263a; --sev-info:#98a1b3; --sev-info-bg:#242a36;
+  --ok:#5fbf94; --ok-bg:#143026;
+  --code-bg:#0b0e14; --line-dim:#39415a;
+  color-scheme: dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#12151c; --surface:#191e28; --ink:#e7eaf1; --ink-soft:#a5adbf; --line:#2b3140; --line-strong:#3a4256;
+  --accent:#66c2ba; --accent-soft:#17332f;
+  --sev-med:#e8b34b; --sev-med-bg:#33290f; --sev-low:#7fadde; --sev-low-bg:#17263a; --sev-info:#98a1b3; --sev-info-bg:#242a36;
+  --ok:#5fbf94; --ok-bg:#143026;
+  --code-bg:#0b0e14;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html{font-size:16px}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--font-body); line-height:1.55; font-size:.95rem;
+  padding-left:max(16px, env(safe-area-inset-left,0px));
+  padding-right:max(16px, env(safe-area-inset-right,0px));
+  padding-block:var(--s4) var(--s5);
+}
+.wrap{max-width:74rem;margin-inline:auto}
+a{color:var(--accent)}
+h1,h2,h3{font-family:var(--font-display); line-height:1.15; margin:0}
+.mono{font-family:var(--font-mono)}
+.eyebrow{font-family:var(--font-mono); font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-soft)}
+
+/* masthead */
+.masthead{border-bottom:3px solid var(--ink); padding-bottom:var(--s3); margin-bottom:var(--s2)}
+.masthead .kicker{display:flex; justify-content:space-between; gap:var(--s2); flex-wrap:wrap}
+h1{font-size:clamp(1.7rem, 4.5vw, 2.6rem); font-weight:700; letter-spacing:-.01em; margin-top:var(--s2)}
+.mast-meta{margin-top:var(--s2); color:var(--ink-soft); font-size:.85rem; display:flex; gap:var(--s3); flex-wrap:wrap}
+.mast-meta b{color:var(--ink); font-weight:600}
+.verdict{margin-top:var(--s3); display:flex; gap:var(--s2); align-items:baseline; flex-wrap:wrap; font-size:1.02rem}
+.verdict .stamp{font-family:var(--font-display); font-weight:700; color:var(--ok); border:2px solid var(--ok); padding:.1rem .6rem; border-radius:4px; transform:rotate(-1deg); background:var(--ok-bg)}
+.targets{display:grid; grid-template-columns:repeat(auto-fit,minmax(15rem,1fr)); gap:var(--s2); margin-top:var(--s3)}
+.target{background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:var(--s2) var(--s3)}
+.target .tid{font-family:var(--font-mono); font-weight:700; font-size:.7rem; letter-spacing:.1em; color:var(--accent)}
+.target .url{font-family:var(--font-mono); font-size:.8rem; word-break:break-all}
+.target .role{color:var(--ink-soft); font-size:.8rem}
+
+/* KPI */
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(7.5rem,1fr)); gap:var(--s2); margin:var(--s4) 0}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:var(--s2) var(--s3); text-align:left}
+.kpi .n{font-family:var(--font-mono); font-size:1.9rem; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.1}
+.kpi .l{font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft)}
+.kpi.z .n{color:var(--ok)} .kpi.m .n{color:var(--sev-med)} .kpi.l .n{color:var(--sev-low)} .kpi.i .n{color:var(--sev-info)}
+
+section{margin-top:var(--s5)}
+section>h2{font-size:1.45rem; font-weight:600; border-bottom:1px solid var(--line-strong); padding-bottom:.3rem; margin-bottom:var(--s3)}
+section>.eyebrow{display:block; margin-bottom:.2rem}
+
+/* diagram */
+.diagram{background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:var(--s3); overflow-x:auto}
+.diagram svg{min-width:44rem; width:100%; height:auto}
+.dgm-note{font-size:.78rem; color:var(--ink-soft); margin-top:var(--s2)}
+
+/* findings */
+.finding{background:var(--surface); border:1px solid var(--line); border-inline-start:5px solid var(--sev); border-radius:6px; padding:var(--s3); margin-bottom:var(--s3)}
+.finding.f-med{--sev:var(--sev-med)} .finding.f-low{--sev:var(--sev-low)} .finding.f-info{--sev:var(--sev-info)}
+.f-head{display:flex; align-items:center; gap:var(--s2); flex-wrap:wrap}
+.f-id{font-family:var(--font-mono); font-weight:700; font-size:.75rem; background:var(--sev); color:var(--surface,#fff); padding:.12rem .5rem; border-radius:4px; letter-spacing:.05em}
+.f-head h3{font-size:1.08rem; font-weight:600; flex:1 1 18rem; min-width:0}
+.chip{font-family:var(--font-mono); font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; padding:.14rem .5rem; border-radius:99px; border:1px solid var(--line-strong); color:var(--ink-soft)}
+.chip.sev{color:var(--sev); border-color:var(--sev); font-weight:700}
+.f-props{display:flex; flex-wrap:wrap; gap:var(--s3); font-size:.78rem; color:var(--ink-soft); margin:var(--s2) 0; padding-bottom:var(--s2); border-bottom:1px dashed var(--line)}
+.f-props b{color:var(--ink); font-weight:600}
+.finding p{margin:.55rem 0}
+.finding .lbl{font-family:var(--font-mono); font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin-top:var(--s3); display:block}
+pre.http{background:var(--code-bg); color:var(--code-fg); border-radius:6px; padding:var(--s2) var(--s3); font-family:var(--font-mono); font-size:.74rem; line-height:1.6; overflow-x:auto; margin:.45rem 0}
+pre.http .dim{color:var(--code-dim)} pre.http .hl{color:var(--code-hl)}
+ul.tight{margin:.4rem 0; padding-left:1.2rem} ul.tight li{margin:.25rem 0}
+
+/* strengths */
+.strengths{display:grid; grid-template-columns:repeat(auto-fit,minmax(21rem,1fr)); gap:var(--s2)}
+.strengths li{list-style:none; background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:var(--s2) var(--s3); font-size:.86rem}
+.strengths li b{display:block; font-size:.82rem; letter-spacing:.02em}
+.strengths li .tick{color:var(--ok); font-weight:700; margin-right:.4rem}
+ul.strengths{padding:0; margin:0; display:grid}
+
+/* matrix */
+.tablebox{overflow-x:auto; border:1px solid var(--line); border-radius:6px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:46rem; font-size:.82rem}
+th,td{padding:.5rem .7rem; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; min-width:0}
+th{font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); background:transparent}
+td.c{white-space:nowrap; font-family:var(--font-mono)}
+.ok{color:var(--ok); font-weight:700} .warn{color:var(--sev-med); font-weight:700} .na{color:var(--ink-soft)} .unv{color:var(--sev-low); font-weight:600}
+
+/* deps */
+.deptable td:first-child{font-family:var(--font-mono); font-size:.78rem}
+.badge-ok{color:var(--ok); border:1px solid var(--ok); border-radius:99px; padding:.05rem .55rem; font-size:.68rem; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.06em; white-space:nowrap}
+
+/* next steps + limitations */
+.steps{counter-reset:st; padding:0; margin:0}
+.steps li{list-style:none; display:flex; gap:var(--s3); padding:var(--s2) 0; border-bottom:1px dashed var(--line)}
+.steps li::before{counter-increment:st; content:counter(st,decimal-leading-zero); font-family:var(--font-mono); font-weight:700; color:var(--accent)}
+.limits li{margin:.4rem 0; color:var(--ink-soft); font-size:.86rem}
+footer{margin-top:var(--s5); border-top:3px solid var(--ink); padding-top:var(--s2); color:var(--ink-soft); font-size:.75rem; display:flex; justify-content:space-between; gap:var(--s2); flex-wrap:wrap}
+@media (max-width:560px){ .kpis{grid-template-columns:repeat(2,1fr)} h1{font-size:1.6rem} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="kicker">
+    <span class="eyebrow">Security assessment · report no. TRN-2026-10-14</span>
+    <span class="eyebrow">OWASP WSTG v4.1 · API-AT1..AT8</span>
+  </div>
+  <h1>Portfolio Pentest Report</h1>
+  <div class="mast-meta">
+    <span>Date <b>14 Oct 2026</b></span>
+    <span>Tester <b>Claude (automated, human-in-loop)</b></span>
+    <span>Method <b>non-destructive · ≤70 req/target · bounded</b></span>
+    <span>Source <b>portfolio monorepo @ <span class="mono">158dd52</span></b></span>
+  </div>
+  <div class="verdict">
+    <span class="stamp">Posture: good — no exploitable vulnerability found</span>
+    <span style="color:var(--ink-soft);font-size:.85rem">all admin surface auth-gated live · 0 production dependency vulnerabilities</span>
+  </div>
+
+  <div class="targets">
+    <div class="target"><div class="tid">T1 · BACKEND API</div><div class="url">portfolio-api-5hvt.onrender.com</div><div class="role">Express 5 · Render (free) · Cloudflare in front · Supabase Postgres · findings: F-01 F-02 F-03 F-04</div></div>
+    <div class="target"><div class="tid">T2 · PUBLIC FRONTEND</div><div class="url">trngnneee.io.vn</div><div class="role">React SPA · strict CSP · public data only · findings: F-05</div></div>
+    <div class="target"><div class="tid">T3 · ADMIN DASHBOARD</div><div class="url">admin.trngnneee.io.vn</div><div class="role">React SPA · sessionStorage Bearer · server-gated by T1 · findings: F-05</div></div>
+  </div>
+</header>
+
+<div class="kpis" role="img" aria-label="Findings by severity: 0 critical, 0 high, 1 medium, 2 low, 2 informational, 0 runtime CVEs">
+  <div class="kpi z"><div class="n">0</div><div class="l">Critical</div></div>
+  <div class="kpi z"><div class="n">0</div><div class="l">High</div></div>
+  <div class="kpi m"><div class="n">1</div><div class="l">Medium</div></div>
+  <div class="kpi l"><div class="n">2</div><div class="l">Low</div></div>
+  <div class="kpi i"><div class="n">2</div><div class="l">Informational</div></div>
+  <div class="kpi z"><div class="n">0</div><div class="l">Runtime CVEs</div></div>
+</div>
+
+<section>
+  <span class="eyebrow">Figure 1</span>
+  <h2>System and trust boundaries as deployed</h2>
+  <div class="diagram">
+    <svg viewBox="0 0 880 270" role="img" aria-label="Request-flow diagram of the portfolio system">
+      <defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" fill="var(--ink-soft)"/></marker></defs>
+      <g font-family="Inter, sans-serif" font-size="11">
+        <!-- browser -->
+        <rect x="12" y="100" width="120" height="60" rx="6" fill="var(--surface)" stroke="var(--line-strong)"/>
+        <text x="72" y="126" text-anchor="middle" fill="var(--ink)" font-weight="600">Browser</text>
+        <text x="72" y="143" text-anchor="middle" fill="var(--ink-soft)">T2 · T3 origins</text>
+        <!-- edge -->
+        <rect x="186" y="100" width="130" height="60" rx="6" fill="var(--surface)" stroke="var(--line-strong)"/>
+        <text x="251" y="126" text-anchor="middle" fill="var(--ink)" font-weight="600">Cloudflare edge</text>
+        <text x="251" y="143" text-anchor="middle" fill="var(--ink-soft)">rotating egress IPs</text>
+        <!-- render -->
+        <rect x="370" y="64" width="180" height="132" rx="6" fill="var(--surface)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="460" y="86" text-anchor="middle" fill="var(--accent)" font-weight="700" font-family="JetBrains Mono, monospace" font-size="10">RENDER</text>
+        <rect x="386" y="98" width="148" height="30" rx="4" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <text x="460" y="117" text-anchor="middle" fill="var(--ink)" font-family="JetBrains Mono, monospace" font-size="10.5">T1 API · Express 5</text>
+        <rect x="386" y="136" width="148" height="22" rx="4" fill="none" stroke="var(--line-strong)"/>
+        <text x="460" y="151" text-anchor="middle" fill="var(--ink-soft)" font-family="JetBrains Mono, monospace" font-size="9.5">T2/T3 static · CSP enforced</text>
+        <text x="460" y="180" text-anchor="middle" fill="var(--ink-soft)" font-size="9.5">Bearer JWT · no cookies → no CSRF</text>
+        <!-- data plane -->
+        <rect x="612" y="42" width="200" height="40" rx="6" fill="var(--surface)" stroke="var(--line-strong)"/>
+        <text x="712" y="59" text-anchor="middle" fill="var(--ink)" font-weight="600">Supabase Postgres</text>
+        <text x="712" y="74" text-anchor="middle" fill="var(--sev-med)" font-size="9.5">TLS, cert unverified by default → F-03</text>
+        <rect x="612" y="104" width="200" height="34" rx="6" fill="var(--surface)" stroke="var(--line-strong)"/>
+        <text x="712" y="125" text-anchor="middle" fill="var(--ink)">Cloudinary (media, PDF)</text>
+        <rect x="612" y="156" width="200" height="34" rx="6" fill="var(--surface)" stroke="var(--line-strong)"/>
+        <text x="712" y="177" text-anchor="middle" fill="var(--ink)">Resend (contact email)</text>
+        <!-- arrows -->
+        <line x1="132" y1="130" x2="182" y2="130" stroke="var(--ink-soft)" stroke-width="1.2" marker-end="url(#arr)"/>
+        <line x1="316" y1="130" x2="366" y2="130" stroke="var(--ink-soft)" stroke-width="1.2" marker-end="url(#arr)"/>
+        <line x1="550" y1="70" x2="608" y2="62" stroke="var(--ink-soft)" stroke-width="1.2" marker-end="url(#arr)"/>
+        <line x1="550" y1="120" x2="608" y2="120" stroke="var(--ink-soft)" stroke-width="1.2" marker-end="url(#arr)"/>
+        <line x1="550" y1="165" x2="608" y2="172" stroke="var(--ink-soft)" stroke-width="1.2" marker-end="url(#arr)"/>
+        <!-- cors annotation -->
+        <text x="460" y="232" text-anchor="middle" fill="var(--sev-low)" font-size="9.5">CORS: exact-origin allowlist · evil origin gets no ACAO · ⚠ stale entry portfolio-admin.onrender.com (F-02)</text>
+        <text x="251" y="232" text-anchor="middle" fill="var(--sev-med)" font-size="9.5">⚠ rate-limit keyed here, not on client (F-01)</text>
+        <text x="72" y="232" text-anchor="middle" fill="var(--ink-soft)" font-size="9.5">sessionStorage token</text>
+      </g>
+    </svg>
+    <div class="dgm-note">Verified live 14 Oct 2026. Hosting platforms (Render, Cloudflare, Supabase) treated as out of scope; version evidence for their CVEs is not externally observable.</div>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">Findings</span>
+  <h2>Five findings, none requiring emergency action</h2>
+
+  <article class="finding f-med">
+    <div class="f-head">
+      <span class="f-id">F-01</span>
+      <h3>IP rate limiting keyed on transient proxy egress IPs — login/contact throttles bypassable</h3>
+      <span class="chip sev">Medium</span><span class="chip">Confirmed</span>
+    </div>
+    <div class="f-props">
+      <span><b>Target</b> T1 (affects T2 contact form, T3 login)</span>
+      <span><b>Component</b> <span class="mono">rate-limit.ts</span> + <span class="mono">trust proxy: 1</span></span>
+      <span><b>CWE-307 / WSTG-ATHN-02</b></span>
+      <span><b>CVSS 5.3</b> <span class="mono">AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L</span></span>
+    </div>
+    <p>The login (10/15 min) and contact (5/15 min) limiters bucket per IP as seen by the origin. The request path is client → Cloudflare → Render → Express, but only one proxy hop is trusted, so the key is Cloudflare's <em>rotating shared egress IP</em>. The <span class="mono">RateLimit</span> headers prove it: one curl client spread across 4–6 independent buckets in six requests, and an attacker cycling egress IPs can post to <span class="mono">/contact</span> far beyond the cap — unbounded owner-paid Resend emails and DB rows. The flip side: two visitors behind one egress IP share the tiny 5-request window. Credential brute-force stays contained by the <em>DB-side</em> account lockout (5 failures → 15 min) — which anyone can also trip against the single admin account on purpose.</p>
+    <span class="lbl">Evidence — six requests, same client, distinct bucket keys</span>
+<pre class="http">POST /api/v1/admin/auth/login   ×6
+<span class="dim">&lt; RateLimit:</span> <span class="hl">"10-in-15min"; r=5;</span> pk=:<span class="hl">ZmIwNDE4YWM4YTE5</span>:
+<span class="dim">&lt; RateLimit:</span> "10-in-15min"; r=8; pk=:OTA0MTExMmZlNTRh:   <span class="dim">← different bucket, higher remainder</span>
+<span class="dim">&lt; RateLimit:</span> "10-in-15min"; r=6; pk=:ZjFhOGNhOThiN2U5:   <span class="dim">← a third bucket
+# a single per-client bucket would read r=5,4,3,2,1,0</span></pre>
+    <span class="lbl">Fix</span>
+<pre class="http"><span class="dim">// app.ts — behind Cloudflare → Render: trust two hops, or</span>
+app.set(<span class="hl">"trust proxy"</span>, 2);
+<span class="dim">// or in express-rate-limit v8 (unspoofable — Cloudflare rewrites it):</span>
+keyGenerator: (req) =&gt; req.headers[<span class="hl">"cf-connecting-ip"</span>] ?? req.ip</pre>
+    <p style="font-size:.83rem;color:var(--ink-soft)"><b>Retest:</b> ≥5 rapid POSTs from one client ⇒ single <span class="mono">pk</span>, monotonic <span class="mono">r</span>; a second client on another exit IP gets its own counter; spoofed <span class="mono">X-Forwarded-For</span> cannot steal it.</p>
+  </article>
+
+  <article class="finding f-low">
+    <div class="f-head">
+      <span class="f-id">F-02</span>
+      <h3>CORS allowlist retains suspended, re-claimable <span class="mono">portfolio-admin.onrender.com</span></h3>
+      <span class="chip sev">Low</span><span class="chip">Confirmed</span>
+    </div>
+    <div class="f-props"><span><b>Target</b> T1 config</span><span><b>Component</b> <span class="mono">render.yaml → CORS_ORIGINS</span></span><span><b>CWE-942</b></span><span><b>CVSS 2.7</b> <span class="mono">AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:N/A:N</span></span></div>
+    <p>The entry still echoes <span class="mono">Access-Control-Allow-Origin</span> live, yet the hostname today serves Render's 503 "Service Suspended" page. <span class="mono">*.onrender.com</span> names are globally claimable once released — the API itself collided with one (hence <span class="mono">-5hvt</span>). If the old admin service is deleted, any Render customer could run script from an allowlisted origin. Blast radius stays small because auth rides a sessionStorage Bearer token, not ambient cookies. <b>Fix:</b> drop the entry; keep <span class="mono">trngnneee.io.vn</span> and <span class="mono">admin.trngnneee.io.vn</span>.</p>
+  </article>
+
+  <article class="finding f-low">
+    <div class="f-head">
+      <span class="f-id">F-03</span>
+      <h3>Database TLS encrypted but server-certificate-unverified by default</h3>
+      <span class="chip sev">Low</span><span class="chip">Likely — deployment dependent</span>
+    </div>
+    <div class="f-props"><span><b>Target</b> T1 → Supabase link</span><span><b>Component</b> <span class="mono">db/client.ts</span></span><span><b>CWE-295</b></span><span><b>CVSS 2.4</b> <span class="mono">AV:A/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N</span></span></div>
+    <p><span class="mono">DATABASE_SSL=true</span> without <span class="mono">DATABASE_CA_CERT</span> yields <span class="mono">rejectUnauthorized:false</span> (the code warns about exactly this). An on-path adversary could impersonate the pooler. Both hops are provider backbones, so this is defense-in-depth; the optional fix is already wired: paste Supabase's CA PEM into <span class="mono">DATABASE_CA_CERT</span> in the Render dashboard. Marked <em>Likely</em> because the secret's actual dashboard value couldn't be inspected externally.</p>
+  </article>
+
+  <article class="finding f-info">
+    <div class="f-head">
+      <span class="f-id">F-04</span>
+      <h3><span class="mono">/healthz</span> reveals DB liveness to anonymous callers</h3>
+      <span class="chip sev">Informational</span><span class="chip">Confirmed</span>
+    </div>
+    <p><span class="mono">{"ok":true,"db":"up"}</span> with correct <span class="mono">Cache-Control: no-store</span>. Conventional status-endpoint exposure; no versions, paths or timings. Acceptable — listed for completeness.</p>
+  </article>
+
+  <article class="finding f-info">
+    <div class="f-head">
+      <span class="f-id">F-05</span>
+      <h3>Hardening nits: HSTS lacks <span class="mono">preload</span>; T2 has no COOP/CORP</h3>
+      <span class="chip sev">Informational</span><span class="chip">Confirmed</span>
+    </div>
+    <p>All three send <span class="mono">max-age=31536000; includeSubDomains</span> and strict CSP (<span class="mono">script-src 'self'</span>, <span class="mono">frame-ancestors 'none'</span>). Missing <span class="mono">preload</span> is optional (review the whole-domain implication of <span class="mono">includeSubDomains</span> on <span class="mono">io.vn</span> first); COOP/CORP matter little with zero cookies. The <span class="mono">/*</span> SPA rewrite returns the HTML shell for unknown <span class="mono">/assets/*</span> paths, which confirmedly prevents source-map leakage.</p>
+  </article>
+</section>
+
+<section>
+  <span class="eyebrow">Verified by this assessment</span>
+  <h2>What the system does right</h2>
+  <ul class="strengths">
+    <li><span class="tick">✓</span><b>Fail-closed admin boundary</b> — <span class="mono">requireAuth</span> mounted once before the whole admin router: 14/14 endpoints and unknown paths returned 401 live; no unauthenticated route enumeration.</li>
+    <li><span class="tick">✓</span><b>Token design</b> — HS256 pinned (alg-confusion & <span class="mono">alg:none</span> rejected live), shape-checked, 8 h TTL, DB token-version revocation (logout-all).</li>
+    <li><span class="tick">✓</span><b>Timing-equalized login</b> — argon2id + dummy verify; wrong-email vs wrong-password responses byte-identical; 2/5 probe attempts left lockout margin untouched.</li>
+    <li><span class="tick">✓</span><b>Schema-first input layer</b> — zod at every boundary (mass-assignment resistant), digit-only id params, LIKE-wildcard escaping, 1 MB body cap (413 verified), all SQL parameterized.</li>
+    <li><span class="tick">✓</span><b>Sanitized output</b> — React escaping + <span class="mono">rehype-sanitize</span> markdown + Mermaid strict + XML-escaped RSS + JSON-LD <span class="mono">&lt;</span>-escaping; allowlist DTOs strip <span class="mono">ipHash</span>/internals; private repo URLs suppressed.</li>
+    <li><span class="tick">✓</span><b>No cookie surface</b> — zero <span class="mono">Set-Cookie</span> on any target ⇒ CSRF structurally not applicable; CORS exact-origin, no <span class="mono">Allow-Credentials</span>.</li>
+    <li><span class="tick">✓</span><b>Defense-in-depth</b> — RLS enabled on every table, <span class="mono">statement_timeout</span> 10 s, bounded pool, log redaction of auth headers/passwords, salted SHA-256 IP storage, honeypot that stores nothing.</li>
+    <li><span class="tick">✓</span><b>Process</b> — CI gates <span class="mono">npm audit --omit=dev</span> + lint + typecheck + a dedicated security regression suite mirroring this assessment's checks.</li>
+  </ul>
+</section>
+
+<section>
+  <span class="eyebrow">Coverage</span>
+  <h2>Target matrix</h2>
+  <div class="tablebox">
+  <table>
+    <thead><tr><th>Check category</th><th>T1 API</th><th>T2 Frontend</th><th>T3 Admin</th></tr></thead>
+    <tbody>
+      <tr><td>Transport, TLS, redirects</td><td class="c"><span class="ok">✅</span></td><td class="c"><span class="ok">✅</span> <span class="na">www→301 apex</span></td><td class="c"><span class="ok">✅</span></td></tr>
+      <tr><td>Security headers / CSP</td><td class="c"><span class="ok">✅</span> helmet</td><td class="c"><span class="ok">✅</span> F-05</td><td class="c"><span class="ok">✅</span> +COOP/noindex</td></tr>
+      <tr><td>Unauthenticated access to admin surface</td><td class="c"><span class="ok">✅ 14/14 → 401</span></td><td class="c na">n/a</td><td class="c"><span class="ok">✅</span> server-gated</td></tr>
+      <tr><td>JWT validation edge cases (alg none, garbage)</td><td class="c"><span class="ok">✅</span> <span class="unv">expiry/revocation ❓</span></td><td class="c na">n/a</td><td class="c na">n/a</td></tr>
+      <tr><td>CORS / preflight / credentials</td><td class="c"><span class="ok">✅</span> <span class="warn">F-02</span></td><td class="c"><span class="ok">✅</span></td><td class="c"><span class="ok">✅</span></td></tr>
+      <tr><td>Input validation, injection, 413, mass assignment</td><td class="c"><span class="ok">✅</span> live + source/owner-suite</td><td class="c"><span class="ok">✅</span></td><td class="c"><span class="ok">✅</span></td></tr>
+      <tr><td>Error/info leakage</td><td class="c"><span class="ok">✅</span> clean JSON, no stacks</td><td class="c"><span class="ok">✅</span></td><td class="c"><span class="ok">✅</span></td></tr>
+      <tr><td>XSS (reflected / stored via markdown / RSS / JSON-LD)</td><td class="c"><span class="ok">✅</span></td><td class="c"><span class="ok">✅</span> sanitized renderers</td><td class="c"><span class="ok">✅</span></td></tr>
+      <tr><td>Rate limiting effectiveness</td><td class="c"><span class="warn">⚠ F-01</span></td><td class="c"><span class="warn">⚠ via contact form</span></td><td class="c"><span class="warn">⚠ login; lockout OK</span></td></tr>
+      <tr><td>Cookie/session/CSRF</td><td class="c na">no cookies</td><td class="c na">none</td><td class="c">sessionStorage <span class="unv">(lazy chunk ❓)</span></td></tr>
+      <tr><td>Secrets in JS / source maps</td><td class="c"><span class="ok">✅ none</span></td><td class="c"><span class="ok">✅ none, no .map</span></td><td class="c"><span class="ok">✅ none, no .map</span></td></tr>
+      <tr><td>Dependency CVEs (lockfile, GHSA feed)</td><td class="c"><span class="ok">0 prod · 1 dev advisory</span></td><td class="c"><span class="ok">0 prod</span></td><td class="c"><span class="ok">0 prod</span></td></tr>
+      <tr><td>Uploads (magic bytes, size, folder regex)</td><td class="c">source + owner suite <span class="unv">(not live-tested)</span></td><td class="c na">n/a</td><td class="c na">n/a</td></tr>
+      <tr><td>BOLA / BFLA / privilege split</td><td class="c na">single account — n/a</td><td class="c na">—</td><td class="c na">—</td></tr>
+      <tr><td>SSRF / open redirect</td><td class="c">no URL-fetch feature — <span class="ok">n/a</span></td><td class="c"><span class="ok">✅</span></td><td class="c"><span class="ok">✅</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="font-size:.8rem;color:var(--ink-soft)">❓ = not verifiable without privileged session or provider console · owner's <span class="mono">backend/test/security.test.ts</span> covers these locally.</p>
+</section>
+
+<section>
+  <span class="eyebrow">Supply chain</span>
+  <h2>Dependency &amp; CVE posture</h2>
+  <div class="tablebox">
+  <table class="deptable">
+    <thead><tr><th>Artifact</th><th>Tree</th><th>Advisory</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Runtime deps (express 5.3.0, jose 6.2.12, helmet 8.3.0, multer 2.4.0, drizzle-orm 0.45.4, pg 8.23.1, pino 10.4.0, zod 4.6.7, argon2 2.2.2, cloudinary 2.11.0, express-rate-limit 8.7.1)</td><td>production</td><td>—</td><td><span class="badge-ok">0 vulnerabilities</span></td></tr>
+      <tr><td><span class="mono">esbuild@0.18.20</span> (nested under <span class="mono">@esbuild-kit/core-utils</span> ← drizzle-kit)</td><td>dev / build-time</td><td>GHSA-67mh-4wv8-2f99 · CVSS 5.3 · fixed in 0.25.0 · <em>no CVE assigned</em></td><td><span class="badge-ok">not reachable in deployment</span> — requires a running local esbuild dev-server; Render runtime (<span class="mono">node dist/src/index.js</span>) never loads it</td></tr>
+      <tr><td>Render / Cloudflare / Supabase managed platforms</td><td>infrastructure</td><td>—</td><td>out of scope · no external version evidence, nothing claimed</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section>
+  <span class="eyebrow">Actions</span>
+  <h2>Priorities</h2>
+  <ol class="steps">
+    <li><span><b>Fix limiter keying</b> (F-01) — one-line change; retest per the monotonic-bucket criterion.</span></li>
+    <li><span><b>Drop the stale CORS origin</b> (F-02) — one edit in <span class="mono">render.yaml</span>.</span></li>
+    <li><span><b>Set <span class="mono">DATABASE_CA_CERT</span></b> (F-03) in the Render dashboard if unset.</span></li>
+    <li><span>Optionally: authenticated follow-up pass (live token expiry, logout-all, upload rejection, one synthetic CRUD roundtrip) whenever owner credentials are shared — all currently source-verified only.</span></li>
+  </ol>
+  <h3 style="margin-top:var(--s4);font-size:1.05rem">Limitations of this assessment</h3>
+  <ul class="limits">
+    <li>No privileged session: authenticated write paths and live revocation/expiry are assessed from source + the repository's own security suite, not reproduced against production.</li>
+    <li>Deployed-commit provenance: asset hashes differ from a local build; every probed behavior matches the reviewed source, but exact commit attestation needs the Render deploy log.</li>
+    <li>State touched in production: 2 failed login attempts (lockout counter, resets on next successful sign-in), honeypot-flagged contact POSTs (stored nothing), no uploads, no data mutation.</li>
+    <li>Single-account design ⇒ horizontal-privilege (BOLA) testing not applicable by construction.</li>
+  </ul>
+</section>
+
+<footer>
+  <span>Prepared from raw evidence in <span class="mono">./security-reports/evidence/</span> (probe transcripts, header dumps, deployed bundles) · full text: <span class="mono">findings.md</span> · machine-readable: <span class="mono">cve-inventory.json</span></span>
+  <span class="mono">14 Oct 2026 · UTC 13:45–14:50</span>
+</footer>
+
+</div>
+</body>
+</html>

@@ -37,9 +37,14 @@ services:
       # Supabase poolers cap client connections per project; one API instance stays well below it.
       - key: DATABASE_POOL_MAX
         value: "5"
-      # Public site + admin (custom domain admin.trngnneee.io.vn, plus its onrender.com hostname).
+      # Public site + admin custom domain only. Never list *.onrender.com defaults: released service names
+      # are re-claimable by any Render customer.
       - key: CORS_ORIGINS
-        value: https://trngnneee.io.vn,https://admin.trngnneee.io.vn,https://portfolio-admin.onrender.com
+        value: https://trngnneee.io.vn,https://admin.trngnneee.io.vn
+      # Render sits behind Cloudflare: req.ip is a rotating Cloudflare egress IP. Cloudflare overwrites this
+      # header on every request, so rate limits key on the real client.
+      - key: CLIENT_IP_HEADER
+        value: cf-connecting-ip
       - key: PUBLIC_SITE_URL
         value: https://trngnneee.io.vn
       - key: PUBLIC_API_URL
@@ -106,6 +111,12 @@ services:
         name: Strict-Transport-Security
         value: max-age=31536000; includeSubDomains
       - path: /*
+        name: Cross-Origin-Opener-Policy
+        value: same-origin
+      - path: /*
+        name: Cross-Origin-Resource-Policy
+        value: same-origin
+      - path: /*
         name: Content-Security-Policy
         # style 'unsafe-inline': motion animations + mermaid SVGs set inline styles.
         # JSON-LD <script type="application/ld+json"> is a data block, not executed, so script-src stays 'self'.
@@ -162,6 +173,9 @@ services:
         value: max-age=31536000; includeSubDomains
       - path: /*
         name: Cross-Origin-Opener-Policy
+        value: same-origin
+      - path: /*
+        name: Cross-Origin-Resource-Policy
         value: same-origin
       - path: /*
         name: Content-Security-Policy

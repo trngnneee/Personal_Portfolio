@@ -1,0 +1,70 @@
+### OPTIONS Origin=portfolio-admin.onrender.com (stale allowlist entry?)
+status=204 size=0
+access-control-allow-methods: GET,HEAD,PUT,PATCH,POST,DELETE
+access-control-allow-origin: https://portfolio-admin.onrender.com
+x-render-origin-server: Render
+---
+### GET https://portfolio-admin.onrender.com/ (does stale hostname serve anything?)
+status=503 size=243
+content-type: text/html; charset=utf-8
+x-render-routing: suspend
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Service Suspended</title>
+</head>
+<body>
+This s---
+### GET admin/auth/me with garbage token
+status=401 size=58
+content-type: application/json; charset=utf-8
+x-render-origin-server: Render
+{"error":{"code":"unauthorized","message":"Unauthorized"}}---
+### GET admin/auth/me alg-none JWT
+status=401 size=58
+content-type: application/json; charset=utf-8
+x-render-origin-server: Render
+{"error":{"code":"unauthorized","message":"Unauthorized"}}---
+### GET T2 robots.txt
+code=200
+content-type: text/plain; charset=utf-8
+cache-control: public, max-age=0, s-maxage=300
+User-agent: *
+Allow: /
+
+Sitemap: https://trngnneee.io.vn/sitemap.xml
+---
+### GET T3 robots.txt
+status=404 size=10
+content-type: text/plain; charset=utf-8
+Not Found
+---
+### GET www.trngnneee.io.vn (unlisted www variant)
+status=301 size=59
+content-type: text/html; charset=utf-8
+location: https://trngnneee.io.vn/
+<a href="https://trngnneee.io.vn/">Moved Permanently</a>.
+
+---
+### T2 bundle fetch
+status=200 size=409207
+0
+### T3 bundle fetch
+status=200 size=303950
+0
+### rate-limit bucket stability (6x OPTIONS-style POST login 400s)
+   1 ratelimit: "10-in-15min"; r=5; t=618
+   1 ratelimit: "10-in-15min"; r=6; t=619
+   1 ratelimit: "10-in-15min"; r=7; t=618
+   1 ratelimit: "10-in-15min"; r=7; t=620
+   1 ratelimit: "10-in-15min"; r=8; t=619
+   1 ratelimit: "10-in-15min"; r=8; t=620
+---
+HTTP/2 204 
+access-control-allow-headers: authorization,content-type
+access-control-allow-methods: GET,HEAD,PUT,PATCH,POST,DELETE
+access-control-allow-origin: https://admin.trngnneee.io.vn
+access-control-max-age: 600
+vary: Origin, Access-Control-Request-Headers

@@ -1,5 +1,6 @@
 import request from "supertest";
 import { beforeEach, describe, expect, it } from "vitest";
+import { createApp } from "../src/app.js";
 import { useTestApp, login, type TestApp } from "./helpers.js";
 
 const getT = useTestApp();
@@ -221,6 +222,25 @@ describe("public contact", () => {
       statuses.push((await request(t.app).post("/api/v1/public/contact").send(valid)).status);
     expect(statuses.slice(0, 5).every((s) => s === 201)).toBe(true);
     expect(statuses[5]).toBe(429);
+  });
+
+  it("rate limits per CLIENT_IP_HEADER client, not per proxy hop", async () => {
+    const app = createApp({
+      ...t.ctx,
+      env: { ...t.ctx.env, CLIENT_IP_HEADER: "cf-connecting-ip" },
+    });
+    const send = (ip: string, hop: string) =>
+      request(app)
+        .post("/api/v1/public/contact")
+        .set("CF-Connecting-IP", ip)
+        .set("X-Forwarded-For", hop)
+        .send(valid);
+    // Same client through rotating proxy egress IPs shares one bucket…
+    for (let i = 0; i < 5; i++)
+      expect((await send("203.0.113.7", `198.51.100.${i}`)).status).toBe(201);
+    expect((await send("203.0.113.7", "198.51.100.99")).status).toBe(429);
+    // …while another client is unaffected.
+    expect((await send("203.0.113.8", "198.51.100.1")).status).toBe(201);
   });
 
   it("404s when the contact section is disabled", async () => {

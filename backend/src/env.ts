@@ -14,6 +14,9 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   PORT: z.coerce.number().int().positive().default(4000),
   CORS_ORIGINS: csv,
+  // Header holding the real client IP, set by the outermost proxy (Cloudflare: cf-connecting-ip).
+  // Empty → req.ip. Keys the rate limiters and the contact IP hash.
+  CLIENT_IP_HEADER: z.string().trim().toLowerCase().default(""),
   DATABASE_URL: z.string().regex(/^postgres(ql)?:\/\//, "Must be a postgres:// URL"),
   // Supabase (and most managed Postgres) require TLS; local Docker doesn't.
   DATABASE_SSL: z
