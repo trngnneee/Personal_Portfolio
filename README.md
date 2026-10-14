@@ -6,7 +6,7 @@ Personal portfolio of **Dang Truong Nguyen** (Backend · Cloud · DevOps) with i
 | --------------- | ---------------------- | ------------------------------------------------------- | ------------------------------------ |
 | Public site     | `frontend/`            | Vite · React 19 · Tailwind v4 · TanStack Query · motion | https://trngnneee.io.vn              |
 | Admin dashboard | `admin/`               | Vite · React 19 · Astryx design system · i18n (vi/en)   | https://portfolio-admin.onrender.com |
-| API             | `backend/`             | Express 5 · Drizzle · PostgreSQL · Cloudinary · JWT     | https://portfolio-api.onrender.com   |
+| API             | `backend/`             | Express 5 · Drizzle · PostgreSQL · Cloudinary · JWT     | https://portfolio-api-5hvt.onrender.com   |
 | Shared code     | `shared/`, `markdown/` | zod schemas, API types, enums · markdown renderer       | —                                    |
 
 Database: **Supabase Postgres** in production, Docker Postgres locally. Hosting: **Render** (`render.yaml`).
@@ -171,7 +171,7 @@ git push origin main
    If DNS is on Cloudflare, use **DNS only** (grey cloud) until Render has issued certificates. Explicit records
    override the homelab's `*.trngnneee.io.vn` wildcard — make sure nothing else claims `@` (Render also adds `www`).
    Only the public site has a custom domain: Render allows 2 custom domains without a payment method, and the apex
-   plus its automatic `www` redirect use both. The API (`https://portfolio-api.onrender.com`) and the admin
+   plus its automatic `www` redirect use both. The API (`https://portfolio-api-5hvt.onrender.com` — Render added the `-5hvt` suffix) and the admin
    (`https://portfolio-admin.onrender.com`) keep their Render URLs — if Render added a suffix to either hostname,
    replace it in `render.yaml` (API: `VITE_API_URL`, `PUBLIC_API_URL`, CSP, sitemap rewrite; admin: `CORS_ORIGINS`).
 
@@ -199,7 +199,7 @@ git push origin main
 6. Verify:
 
    ```bash
-   curl -s https://portfolio-api.onrender.com/healthz          # {"ok":true,"db":"up"}
+   curl -s https://portfolio-api-5hvt.onrender.com/healthz          # {"ok":true,"db":"up"}
    curl -sI https://trngnneee.io.vn | grep -i content-security-policy
    curl -s https://trngnneee.io.vn/sitemap.xml | head
    ```
