@@ -6,7 +6,7 @@ Personal portfolio of **Dang Truong Nguyen** (Backend · Cloud · DevOps) with i
 | --------------- | ---------------------- | ------------------------------------------------------- | ------------------------------------ |
 | Public site     | `frontend/`            | Vite · React 19 · Tailwind v4 · TanStack Query · motion | https://trngnneee.io.vn              |
 | Admin dashboard | `admin/`               | Vite · React 19 · Astryx design system · i18n (vi/en)   | https://portfolio-admin.onrender.com |
-| API             | `backend/`             | Express 5 · Drizzle · PostgreSQL · Cloudinary · JWT     | https://api.trngnneee.io.vn          |
+| API             | `backend/`             | Express 5 · Drizzle · PostgreSQL · Cloudinary · JWT     | https://portfolio-api.onrender.com   |
 | Shared code     | `shared/`, `markdown/` | zod schemas, API types, enums · markdown renderer       | —                                    |
 
 Database: **Supabase Postgres** in production, Docker Postgres locally. Hosting: **Render** (`render.yaml`).
@@ -164,15 +164,16 @@ git push origin main
    migrations; health check is `GET /healthz` (pings the DB).
 4. **DNS** for `trngnneee.io.vn` (Render → each service → Settings → Custom Domains shows the exact targets):
 
-   | Name       | Type    | Value                                                                   |
-   | ---------- | ------- | ----------------------------------------------------------------------- |
-   | `@` (apex) | `A`     | `216.24.57.1` (or ALIAS/flattened CNAME → `portfolio-web.onrender.com`) |
-   | `api`      | `CNAME` | `portfolio-api.onrender.com`                                            |
+   | Name       | Type | Value                                                                   |
+   | ---------- | ---- | ----------------------------------------------------------------------- |
+   | `@` (apex) | `A`  | `216.24.57.1` (or ALIAS/flattened CNAME → `portfolio-web.onrender.com`) |
 
    If DNS is on Cloudflare, use **DNS only** (grey cloud) until Render has issued certificates. Explicit records
-   override the homelab's `*.trngnneee.io.vn` wildcard — make sure nothing else claims `@` or `api`.
-   The admin has **no custom domain** (Render allows 2 without a payment method): it lives at
-   `https://portfolio-admin.onrender.com`. If Render gave it another hostname, update `CORS_ORIGINS` in `render.yaml`.
+   override the homelab's `*.trngnneee.io.vn` wildcard — make sure nothing else claims `@` (Render also adds `www`).
+   Only the public site has a custom domain: Render allows 2 custom domains without a payment method, and the apex
+   plus its automatic `www` redirect use both. The API (`https://portfolio-api.onrender.com`) and the admin
+   (`https://portfolio-admin.onrender.com`) keep their Render URLs — if Render added a suffix to either hostname,
+   replace it in `render.yaml` (API: `VITE_API_URL`, `PUBLIC_API_URL`, CSP, sitemap rewrite; admin: `CORS_ORIGINS`).
 
 5. **Create the admin account and seed content — from your machine.** The free plan has no Render Shell, so these
    one-off commands connect to Supabase directly. `read -rs` keeps the secrets out of your shell history; values
@@ -198,7 +199,7 @@ git push origin main
 6. Verify:
 
    ```bash
-   curl -s https://api.trngnneee.io.vn/healthz          # {"ok":true,"db":"up"}
+   curl -s https://portfolio-api.onrender.com/healthz          # {"ok":true,"db":"up"}
    curl -sI https://trngnneee.io.vn | grep -i content-security-policy
    curl -s https://trngnneee.io.vn/sitemap.xml | head
    ```
