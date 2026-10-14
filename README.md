@@ -2,12 +2,12 @@
 
 Personal portfolio of **Dang Truong Nguyen** (Backend · Cloud · DevOps) with its own admin dashboard and API.
 
-| App             | Path                   | Stack                                                   | Production URL                |
-| --------------- | ---------------------- | ------------------------------------------------------- | ----------------------------- |
-| Public site     | `frontend/`            | Vite · React 19 · Tailwind v4 · TanStack Query · motion | https://trngnneee.io.vn       |
-| Admin dashboard | `admin/`               | Vite · React 19 · Astryx design system · i18n (vi/en)   | https://admin.trngnneee.io.vn |
-| API             | `backend/`             | Express 5 · Drizzle · PostgreSQL · Cloudinary · JWT     | https://api.trngnneee.io.vn   |
-| Shared code     | `shared/`, `markdown/` | zod schemas, API types, enums · markdown renderer       | —                             |
+| App             | Path                   | Stack                                                   | Production URL                       |
+| --------------- | ---------------------- | ------------------------------------------------------- | ------------------------------------ |
+| Public site     | `frontend/`            | Vite · React 19 · Tailwind v4 · TanStack Query · motion | https://trngnneee.io.vn              |
+| Admin dashboard | `admin/`               | Vite · React 19 · Astryx design system · i18n (vi/en)   | https://portfolio-admin.onrender.com |
+| API             | `backend/`             | Express 5 · Drizzle · PostgreSQL · Cloudinary · JWT     | https://api.trngnneee.io.vn          |
+| Shared code     | `shared/`, `markdown/` | zod schemas, API types, enums · markdown renderer       | —                                    |
 
 Database: **Supabase Postgres** in production, Docker Postgres locally. Hosting: **Render** (`render.yaml`).
 Architecture and design decisions: [`docs/SYSTEM_DESIGN.md`](docs/SYSTEM_DESIGN.md).
@@ -167,11 +167,12 @@ git push origin main
    | Name       | Type    | Value                                                                   |
    | ---------- | ------- | ----------------------------------------------------------------------- |
    | `@` (apex) | `A`     | `216.24.57.1` (or ALIAS/flattened CNAME → `portfolio-web.onrender.com`) |
-   | `admin`    | `CNAME` | `portfolio-admin.onrender.com`                                          |
    | `api`      | `CNAME` | `portfolio-api.onrender.com`                                            |
 
    If DNS is on Cloudflare, use **DNS only** (grey cloud) until Render has issued certificates. Explicit records
-   override the homelab's `*.trngnneee.io.vn` wildcard — make sure nothing else claims `@`, `admin`, `api`.
+   override the homelab's `*.trngnneee.io.vn` wildcard — make sure nothing else claims `@` or `api`.
+   The admin has **no custom domain** (Render allows 2 without a payment method): it lives at
+   `https://portfolio-admin.onrender.com`. If Render gave it another hostname, update `CORS_ORIGINS` in `render.yaml`.
 
 5. **Create the admin account and seed content — from your machine.** The free plan has no Render Shell, so these
    one-off commands connect to Supabase directly. `read -rs` keeps the secrets out of your shell history; values
@@ -202,7 +203,7 @@ git push origin main
    curl -s https://trngnneee.io.vn/sitemap.xml | head
    ```
 
-   Then sign in at https://admin.trngnneee.io.vn, review the scanned projects, and enable the blog if wanted.
+   Then sign in at https://portfolio-admin.onrender.com, review the scanned projects, and enable the blog if wanted.
 
 ---
 
