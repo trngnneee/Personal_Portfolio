@@ -1,0 +1,47 @@
+{
+  "name": "@portfolio/backend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
+    "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && tsc -p tsconfig.build.json",
+    "start": "node dist/src/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate",
+    "seed": "tsx --env-file-if-exists=.env seed/seed.ts",
+    "admin:set-password": "node --env-file-if-exists=.env dist/scripts/set-admin-password.js"
+  },
+  "dependencies": {
+    "@node-rs/argon2": "2.2.2",
+    "@portfolio/shared": "0.0.0",
+    "cloudinary": "2.11.0",
+    "cors": "2.8.6",
+    "drizzle-orm": "0.45.4",
+    "express": "5.3.0",
+    "express-rate-limit": "8.7.1",
+    "helmet": "8.3.0",
+    "jose": "6.2.12",
+    "multer": "2.4.0",
+    "pg": "8.23.1",
+    "pino": "10.4.0",
+    "pino-http": "11.0.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/cors": "2.8.19",
+    "@types/express": "5.0.6",
+    "@types/multer": "2.3.0",
+    "@types/pg": "8.23.1",
+    "@types/supertest": "7.2.1",
+    "drizzle-kit": "0.31.11",
+    "pino-pretty": "13.2.0",
+    "supertest": "7.3.1",
+    "tsx": "4.23.15",
+    "vitest": "5.0.4"
+  }
+}

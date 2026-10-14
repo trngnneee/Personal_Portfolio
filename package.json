@@ -1,42 +1,39 @@
 {
-  "name": "personal-portfolio",
+  "name": "trngnneee-portfolio",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+  "workspaces": [
+    "shared",
+    "markdown",
+    "backend",
+    "frontend",
+    "admin"
+  ],
+  "engines": {
+    "node": ">=22"
   },
-  "dependencies": {
-    "@firecms/neat": "^0.4.0",
-    "@midudev/tailwind-animations": "^0.2.0",
-    "@tailwindcss/vite": "^4.1.14",
-    "aos": "^2.3.4",
-    "atropos": "^2.0.2",
-    "emailjs-com": "^3.2.0",
-    "just-validate": "^4.3.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "react-icons": "^5.5.0",
-    "react-router-dom": "^7.9.3",
-    "react-scroll": "^1.9.3",
-    "react-spinners": "^0.17.0",
-    "sonner": "^2.0.7",
-    "tailwindcss": "^4.1.14",
-    "three": "^0.169.0",
-    "typed.js": "^2.0.12"
+  "scripts": {
+    "db:up": "docker compose up -d --wait db",
+    "db:down": "docker compose down",
+    "predev": "npm run build -w shared",
+    "dev": "concurrently -k -n shared,api,web,admin -c gray,blue,green,magenta \"npm run dev -w shared\" \"npm run dev -w backend\" \"npm run dev -w frontend\" \"npm run dev -w admin\"",
+    "build": "npm run build -w shared && npm run build -w backend -w frontend -w admin",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "npm run build -w shared && npm run typecheck -w markdown -w backend -w frontend -w admin",
+    "test": "npm run build -w shared && npm run test --workspaces --if-present"
   },
   "devDependencies": {
-    "@eslint/js": "^9.36.0",
-    "@types/react": "^19.1.16",
-    "@types/react-dom": "^19.1.9",
-    "@vitejs/plugin-react": "^5.0.4",
-    "eslint": "^9.36.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.22",
-    "globals": "^16.4.0",
-    "vite": "^7.1.7"
+    "@eslint/js": "9.39.5",
+    "concurrently": "10.0.6",
+    "eslint": "9.39.5",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.7",
+    "globals": "17.13.0",
+    "prettier": "3.9.10",
+    "@types/node": "22.20.5",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.2"
   }
 }

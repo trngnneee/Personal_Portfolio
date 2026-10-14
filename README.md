@@ -1,113 +1,219 @@
-# 🌐 Personal Portfolio
+# trngnneee — portfolio
 
-A simple and clean personal portfolio built with **React + Vite**.  
-It includes basic sections like **About**, **Projects**, and **Contact**, and can be easily customized to showcase your profile.
+Personal portfolio of **Dang Truong Nguyen** (Backend · Cloud · DevOps) with its own admin dashboard and API.
+
+| App             | Path                   | Stack                                                   | Production URL                |
+| --------------- | ---------------------- | ------------------------------------------------------- | ----------------------------- |
+| Public site     | `frontend/`            | Vite · React 19 · Tailwind v4 · TanStack Query · motion | https://trngnneee.io.vn       |
+| Admin dashboard | `admin/`               | Vite · React 19 · Astryx design system · i18n (vi/en)   | https://admin.trngnneee.io.vn |
+| API             | `backend/`             | Express 5 · Drizzle · PostgreSQL · Cloudinary · JWT     | https://api.trngnneee.io.vn   |
+| Shared code     | `shared/`, `markdown/` | zod schemas, API types, enums · markdown renderer       | —                             |
+
+Database: **Supabase Postgres** in production, Docker Postgres locally. Hosting: **Render** (`render.yaml`).
+Architecture and design decisions: [`docs/SYSTEM_DESIGN.md`](docs/SYSTEM_DESIGN.md).
 
 ---
 
-## 🚀 Features
+## 1. Local development
 
-- ⚡ Built with [Vite](https://vitejs.dev/) for fast development and builds
-- ⚛️ Powered by [React](https://react.dev/)
-- 🎨 Styled with [Tailwind CSS](https://tailwindcss.com/)
-- 🔥 Hot Module Replacement (HMR) enabled
-
----
-
-## 🛠️ Installation & Setup
-
-1. **Clone this repository**
+Requirements: **Node 22** (`nvm use`), **Docker** (for Postgres).
 
 ```bash
-git clone https://github.com/your-username/personal-portfolio.git
-cd personal-portfolio
+npm ci                       # install all workspaces
+npm run db:up                # Postgres 17 on localhost:5432 (docker compose)
+
+# per-app env files (defaults work for local dev)
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+cp admin/.env.example admin/.env
+
+# seed the old portfolio content without touching Cloudinary (images served by the API)
+npm run seed -w backend -- --no-upload
+
+# create the admin account (prompts for a password, min 12 chars)
+npm run build -w shared -w backend
+npm run admin:set-password -w backend -- --email you@example.com
+
+npm run dev                  # API :4000 · site :5173 · admin :5174 (migrations run on API start)
 ```
 
-2. **Install dependencies**
+Without Cloudinary credentials the API stores uploads in `backend/data/uploads` (dev only — production refuses
+to start without Cloudinary).
+
+### Scripts (root)
+
+| Script                              | What it does                                                |
+| ----------------------------------- | ----------------------------------------------------------- |
+| `npm run dev`                       | shared (watch) + API + site + admin                         |
+| `npm run build`                     | builds every package                                        |
+| `npm run lint` / `npm run format`   | ESLint 9 flat config / Prettier                             |
+| `npm run typecheck`                 | `tsc --noEmit` everywhere                                   |
+| `npm test`                          | vitest in every package (backend needs Postgres, see below) |
+| `npm run db:up` / `npm run db:down` | local Postgres via Docker Compose                           |
+
+### Tests
+
+Backend tests run against a real Postgres: each test file creates and drops its own database.
 
 ```bash
-npm install
+npm run db:up
+TEST_DATABASE_URL=postgres://portfolio:portfolio@localhost:5432/postgres npm test
 ```
 
-3. **Run the project locally**
+Suites: auth guard (every admin route → 401, generated from the router), lockout, token revocation, public
+visibility rules, CRUD/reorder/media lifecycle, a security suite (SQL injection, path traversal, JWT forgery,
+mass assignment, malicious uploads, CORS, headers), RLS on every table, plus frontend/admin UI tests.
+CI (`.github/workflows/ci.yml`) runs audit → lint → typecheck → tests (Postgres service) → build.
+
+---
+
+## 2. Environment variables
+
+### `backend/`
+
+| Variable                                             | Required | Notes                                                                                                               |
+| ---------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                                       | ✅       | Local: `postgres://portfolio:portfolio@localhost:5432/portfolio`. Production: Supabase **Session pooler** URI       |
+| `DATABASE_SSL`                                       |          | `true` for Supabase                                                                                                 |
+| `DATABASE_CA_CERT`                                   |          | Supabase CA (PEM, `\n` escapes allowed) → verified TLS. Without it TLS is encrypted but unverified (warning logged) |
+| `DATABASE_POOL_MAX`                                  |          | Default 10; use 5 on Supabase                                                                                       |
+| `JWT_SECRET`                                         | ✅       | ≥ 32 bytes. `node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"`                        |
+| `IP_HASH_SALT`                                       | ✅       | Salt for hashing contact-form IPs                                                                                   |
+| `CORS_ORIGINS`                                       | ✅       | Comma-separated: site + admin origins                                                                               |
+| `PUBLIC_SITE_URL` / `PUBLIC_API_URL`                 |          | Sitemap/RSS links; dev upload URLs                                                                                  |
+| `CLOUDINARY_CLOUD_NAME` / `_API_KEY` / `_API_SECRET` | prod ✅  | Media storage                                                                                                       |
+| `CLOUDINARY_FOLDER`                                  |          | Default `portfolio`                                                                                                 |
+| `RESEND_API_KEY` / `RESEND_FROM`                     |          | Email on new contact messages (optional)                                                                            |
+
+### `frontend/` and `admin/` (build-time, public)
+
+| Variable                     | App   | Notes                                       |
+| ---------------------------- | ----- | ------------------------------------------- |
+| `VITE_API_URL`               | both  | API origin, no trailing slash               |
+| `VITE_SITE_URL`              | site  | Canonical URL (OG tags, robots.txt sitemap) |
+| `VITE_PUBLIC_SITE_URL`       | admin | "View on site" links                        |
+| `VITE_CLOUDINARY_CLOUD_NAME` | both  | Responsive image URLs                       |
+
+`VITE_*` values are compiled into the JS bundle — never put secrets there.
+
+---
+
+## 3. Content & seed data
+
+- `backend/seed/data.ts` — content recovered from the previous site (profile, links, skills, projects, achievements,
+  activities, NewEra experience). Assets live in `backend/seed/assets/` (committed, ~8 MB; camera photos were
+  downscaled to 2400 px — originals are in git history).
+- `backend/seed/scanned/` — projects/skills from a read-only scan of the homelab/bot repos. **All unpublished.**
+  Review [`backend/seed/scanned/REVIEW.md`](backend/seed/scanned/REVIEW.md), then publish from the admin
+  (or edit the files and re-seed).
+- The seed is idempotent: it stops if content exists; `--force` replaces content (keeps messages + admin account).
+- With Cloudinary configured, assets upload under `<CLOUDINARY_FOLDER>/seed/<name>` with `overwrite: false`,
+  so re-running never creates duplicates.
+
+---
+
+## 4. Production setup (you run these — nothing here is automated)
+
+### 4.1 Supabase (database)
+
+1. Create a project in **Southeast Asia (Singapore)** — same region as the Render services.
+2. **Project Settings → Database → Connection string → Session pooler** (port 5432). Copy the URI:
+   `postgresql://postgres.<project-ref>:<password>@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres`
+   - Use the **session** pooler: Render has no IPv6 egress and Supabase's direct host is IPv6-only.
+   - Don't add `?sslmode=...`; TLS is controlled by `DATABASE_SSL` / `DATABASE_CA_CERT`.
+3. _(Recommended)_ **Database settings → SSL Configuration → Download certificate**, paste the PEM into
+   `DATABASE_CA_CERT` for verified TLS.
+4. _(Recommended)_ **Settings → API → Data API**: disable it, or remove `public` from "Exposed schemas".
+   The app never uses it. Either way, migration `0001_enable_rls` turns on RLS for every table, so the anon key
+   can read nothing (`backend/test/rls.test.ts` keeps it that way for new tables).
+5. Notes: free projects **pause after 7 days without activity**; daily backups depend on plan (PITR on Pro).
+
+Migrations run automatically when the API starts (drizzle migrator, forward-only, stored in `drizzle.__drizzle_migrations`).
+
+### 4.2 Cloudinary
+
+Dashboard → API Keys: copy cloud name, API key and secret. Uploads go to `portfolio/<folder>`.
+CV PDFs are uploaded as `raw` (Cloudinary blocks PDF delivery as `image` on new accounts).
+
+### 4.3 Resend (optional)
+
+Verify the sending domain (`trngnneee.io.vn`) in Resend, create an API key, and set `RESEND_API_KEY`.
+Contact messages are always stored in the DB; email is best-effort.
+
+### 4.4 Commit and push
+
+The rebuild replaces the old Vite app at the repo root. Review, then commit and push yourself:
 
 ```bash
-npm run dev
+git status
+git add -A
+git commit -m "Rebuild portfolio: API, public site and admin dashboard"
+git push origin main
 ```
 
-4. **Open in browser**
+### 4.5 Render (Blueprint)
 
-```sh
-http://localhost:5173
-```
+1. Render Dashboard → **New → Blueprint** → select this repo → it reads `render.yaml`
+   (`portfolio-api`, `portfolio-web`, `portfolio-admin`, region Singapore).
+2. Fill the `sync: false` secrets when prompted:
+   - `portfolio-api`: `DATABASE_URL` (Supabase session pooler URI), `DATABASE_CA_CERT` (optional),
+     `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `RESEND_API_KEY` (optional).
+     `JWT_SECRET` and `IP_HASH_SALT` are generated by Render.
+   - `portfolio-web` and `portfolio-admin`: `VITE_CLOUDINARY_CLOUD_NAME`.
+3. **Apply**. The API build runs `npm ci --include=dev` (TypeScript is a dev dependency) and starts with
+   migrations; health check is `GET /healthz` (pings the DB).
+4. **DNS** for `trngnneee.io.vn` (Render → each service → Settings → Custom Domains shows the exact targets):
 
----
+   | Name       | Type    | Value                                                                   |
+   | ---------- | ------- | ----------------------------------------------------------------------- |
+   | `@` (apex) | `A`     | `216.24.57.1` (or ALIAS/flattened CNAME → `portfolio-web.onrender.com`) |
+   | `admin`    | `CNAME` | `portfolio-admin.onrender.com`                                          |
+   | `api`      | `CNAME` | `portfolio-api.onrender.com`                                            |
 
-## 📁 Project Structure
+   If DNS is on Cloudflare, use **DNS only** (grey cloud) until Render has issued certificates. Explicit records
+   override the homelab's `*.trngnneee.io.vn` wildcard — make sure nothing else claims `@`, `admin`, `api`.
 
-```ini
-personal-portfolio/
-├── public/                # Static assets
-├── src/
-│   ├── components/        # Reusable UI components
-│   ├── sections/          # About, Projects, Contact sections
-│   ├── App.jsx            # Main App component
-│   ├── main.jsx           # Entry point
-│   └── index.css          # Tailwind styles
-├── .eslintrc.cjs          # ESLint configuration
-├── index.html             # HTML template
-├── package.json           # Project dependencies
-└── vite.config.js         # Vite configuration
-```
+5. **Create the admin account** — Render → `portfolio-api` → **Shell**:
 
----
+   ```bash
+   npm run admin:set-password -w backend -- --email <your-email>
+   ```
 
-## 🧑‍💻 Customization
+6. **Seed content with Cloudinary upload** — same Shell (uses the service's env):
 
-- Update your **name**, **bio**, and **project details** in the `src/sections/` folder.
+   ```bash
+   npm run seed -w backend
+   ```
 
-- Modify styles in `index.css` or add your own Tailwind utilities.
+7. Verify:
 
-- To deploy, you can use:
+   ```bash
+   curl -s https://api.trngnneee.io.vn/healthz          # {"ok":true,"db":"up"}
+   curl -sI https://trngnneee.io.vn | grep -i content-security-policy
+   curl -s https://trngnneee.io.vn/sitemap.xml | head
+   ```
 
-```bash
-npm run build
-```
-
----
-
-## 🧩 Tech Stack
-
-- **React** – UI Library
-- **Vite** – Build Tool
-- **Tailwind CSS** – Styling
-- **ESLint** – Code Linting
+   Then sign in at https://admin.trngnneee.io.vn, review the scanned projects, and enable the blog if wanted.
 
 ---
 
-## 📝 License
+## 5. Operations
 
-This project is open source and available under the [MIT License](LICENSE).
+| Task                     | How                                                                                                                  |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| Backup (JSON)            | Admin → Settings → **Export JSON** (all content, no admin account)                                                   |
+| Backup (SQL)             | `pg_dump "$DATABASE_URL" --no-owner --no-privileges -Fc -f portfolio-$(date +%F).dump` (session pooler URI)          |
+| Restore (SQL)            | `pg_restore --no-owner --clean -d "$DATABASE_URL" portfolio-YYYY-MM-DD.dump`                                         |
+| Roll back a deploy       | Render → service → Events → **Rollback** (migrations are forward-only: write a new migration to undo schema changes) |
+| Sign out everywhere      | Admin → Settings → "Sign out of all devices" (bumps `token_version`)                                                 |
+| Reset the admin password | Render Shell: `npm run admin:set-password -w backend -- --email <email>` (also revokes sessions)                     |
+| Rotate `JWT_SECRET`      | Change it in Render → redeploy; every session ends                                                                   |
+| Logs                     | Render → `portfolio-api` → Logs (pino JSON; `authorization`/passwords redacted)                                      |
 
----
+### Limits & trade-offs
 
-### 💡 Author
-
-**Truong Nguyen**  
-Frontend Developer ✨  
-📧 [dtn06052005@gmail.com](mailto:dtn06052005@gmail.com)
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Rate limits (login 10/15 min, contact 5/15 min per IP) are **in memory per instance** — fine for one API
+  instance; use a shared store if you ever scale out.
+- The public site is a client-rendered SPA: link previews use the static tags in `frontend/index.html`;
+  per-page `<title>`/OG tags are applied after JS runs.
+- Supabase free tier pauses inactive projects; Render `starter` keeps the API awake.

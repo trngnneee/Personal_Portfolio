@@ -1,0 +1,257 @@
+@import "tailwindcss";
+
+/* Single token system for the public site. Never use raw palette classes (green-400, gray-800...). */
+@theme {
+  --color-primary-50: #e6fff0;
+  --color-primary-100: #b3ffd9;
+  --color-primary-200: #80ffb3;
+  --color-primary-300: #4dff8c;
+  --color-primary-400: #26ff66;
+  --color-primary-500: #00ff41;
+  --color-primary-600: #00e63a;
+  --color-primary-700: #00cc33;
+  --color-primary-800: #00ad2c;
+  --color-primary-900: #008f26;
+
+  --color-accent-500: #ffb800;
+  --color-accent-700: #ff9500;
+
+  --color-info-300: #7dd3fc;
+  --color-danger-300: #fda4af;
+  --color-danger-500: #f43f5e;
+
+  /* Neutral ramp tuned so 300–400 pass WCAG AA on #000. */
+  --color-neutral-50: #f5f7fa;
+  --color-neutral-100: #e4e8ee;
+  --color-neutral-200: #c9d1da;
+  --color-neutral-300: #aab4c0;
+  --color-neutral-400: #8b97a5;
+  --color-neutral-500: #6b7785;
+  --color-neutral-600: #4e5965;
+  --color-neutral-700: #343d46;
+  --color-neutral-800: #1d242a;
+  --color-neutral-900: #0f1418;
+
+  --color-bg-page: #000000;
+  --color-bg-surface: #0a0e11;
+  --color-bg-elevated: #141b20;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+
+  --shadow-glow: 0 0 16px rgb(0 255 65 / 0.3);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-bg-page text-neutral-100 font-sans antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Base ---------- */
+:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--color-primary-500);
+  color: var(--color-bg-page);
+}
+
+/* Subtle terminal grid behind every page. */
+.grid-bg {
+  background-image:
+    linear-gradient(rgb(0 255 65 / 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(0 255 65 / 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(ellipse at top, black 30%, transparent 75%);
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.8);
+  backdrop-filter: blur(4px);
+}
+
+/* ---------- Markdown (shared renderer output) ---------- */
+.prose-terminal {
+  color: var(--color-neutral-200);
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+.prose-terminal > * + * {
+  margin-top: 1rem;
+}
+.prose-terminal :is(h1, h2, h3, h4) {
+  font-family: var(--font-mono);
+  color: var(--color-neutral-50);
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 2rem;
+  scroll-margin-top: 5rem;
+}
+.prose-terminal h2 {
+  font-size: 1.375rem;
+}
+.prose-terminal h2::before {
+  content: "## ";
+  color: var(--color-primary-500);
+}
+.prose-terminal h3 {
+  font-size: 1.125rem;
+}
+.prose-terminal h3::before {
+  content: "### ";
+  color: var(--color-primary-700);
+}
+.prose-terminal a {
+  color: var(--color-primary-400);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-terminal a:hover {
+  color: var(--color-primary-300);
+}
+.prose-terminal :is(ul, ol) {
+  padding-left: 1.5rem;
+}
+.prose-terminal ul {
+  list-style: square;
+}
+.prose-terminal ol {
+  list-style: decimal;
+}
+.prose-terminal li + li {
+  margin-top: 0.375rem;
+}
+.prose-terminal li::marker {
+  color: var(--color-primary-500);
+}
+.prose-terminal strong {
+  color: var(--color-neutral-50);
+}
+.prose-terminal blockquote {
+  border-left: 3px solid var(--color-primary-700);
+  padding-left: 1rem;
+  color: var(--color-neutral-300);
+}
+.prose-terminal :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-neutral-800);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+  color: var(--color-primary-300);
+}
+.prose-terminal pre {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-neutral-800);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+.prose-terminal img {
+  border-radius: 8px;
+  border: 1px solid var(--color-neutral-800);
+  height: auto;
+}
+.prose-terminal hr {
+  border-color: var(--color-neutral-800);
+}
+.prose-terminal .md-table-wrap {
+  overflow-x: auto;
+}
+.prose-terminal table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+.prose-terminal :is(th, td) {
+  border: 1px solid var(--color-neutral-800);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.prose-terminal th {
+  background: var(--color-bg-elevated);
+  color: var(--color-neutral-50);
+  font-family: var(--font-mono);
+}
+.prose-terminal .md-mermaid {
+  display: flex;
+  justify-content: center;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-neutral-800);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+.prose-terminal .md-mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* highlight.js classes, mapped to the token palette. */
+.hljs-comment,
+.hljs-quote {
+  color: var(--color-neutral-400);
+  font-style: italic;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-built_in,
+.hljs-meta {
+  color: var(--color-primary-400);
+}
+.hljs-string,
+.hljs-attr,
+.hljs-symbol,
+.hljs-template-variable {
+  color: var(--color-accent-500);
+}
+.hljs-number,
+.hljs-literal,
+.hljs-type {
+  color: var(--color-info-300);
+}
+.hljs-title,
+.hljs-section,
+.hljs-name {
+  color: var(--color-neutral-50);
+  font-weight: 700;
+}
+.hljs-variable,
+.hljs-params {
+  color: var(--color-neutral-200);
+}
+.hljs-deletion {
+  color: var(--color-danger-300);
+}
+.hljs-addition {
+  color: var(--color-primary-300);
+}
