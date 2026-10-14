@@ -283,6 +283,17 @@ describe("Spidey widget", () => {
     expect(within(dialog).getAllByText("Hello?")).toHaveLength(1);
   });
 
+  it("bot demands Turnstile but the build has no site key → clear error, no endless 'retrying'", async () => {
+    renderWithBot(
+      onlineBot(() => Response.json({ error: { code: "verification_failed" } }, { status: 403 })),
+    );
+    const dialog = await openPanel();
+    await ask(dialog, "Hi");
+    const alert = await within(dialog).findByRole("alert");
+    expect(alert).toHaveTextContent("Spidey couldn't verify this browser");
+    expect(alert).not.toHaveTextContent(/retrying automatically/);
+  });
+
   it("chat 503 unavailable mid-session → switches to the offline state", async () => {
     renderWithBot(
       onlineBot(() => Response.json({ error: { code: "unavailable" } }, { status: 503 })),

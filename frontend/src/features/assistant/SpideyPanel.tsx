@@ -47,7 +47,8 @@ function SpideyPanel({ id, spidey, turnstileSiteKey, onClose }: PanelProps) {
   const verifying = needsToken && !token && !turnstileFailed;
 
   const afterResult = (code: string | null) => {
-    if (code === "verification_failed") {
+    // Without a site key there is no Turnstile to produce a new token: nothing to wait for.
+    if (code === "verification_failed" && needsToken) {
       retryOnToken.current = true;
       setTurnstileReset((n) => n + 1);
     }
@@ -194,7 +195,11 @@ function SpideyPanel({ id, spidey, turnstileSiteKey, onClose }: PanelProps) {
                     className="mt-0.5 size-3.5 shrink-0 text-spidey-danger"
                     aria-hidden="true"
                   />
-                  <p className="flex-1 text-xs leading-relaxed text-spidey-text">{error.message}</p>
+                  <p className="flex-1 text-xs leading-relaxed text-spidey-text">
+                    {error.code === "verification_failed" && !needsToken
+                      ? "Spidey couldn't verify this browser. Please try again later."
+                      : error.message}
+                  </p>
                   {error.retryable && (
                     <button
                       type="button"
