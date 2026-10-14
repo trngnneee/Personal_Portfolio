@@ -30,6 +30,7 @@ import { ensureSections } from "../src/modules/sections/service.js";
 import * as data from "./data.js";
 import { scannedProjects } from "./scanned/projects.js";
 import { scannedSkills } from "./scanned/skills.js";
+import { describeError } from "../src/lib/errors.js";
 
 const ASSETS = fileURLToPath(new URL("./assets", import.meta.url));
 
@@ -239,15 +240,3 @@ main()
     process.exitCode = 1;
   })
   .finally(() => db.$client.end());
-
-/** Error message plus its causes (Drizzle wraps connection errors such as ECONNREFUSED / auth failures). */
-function describeError(err: unknown): string {
-  const parts: string[] = [];
-  for (let e: unknown = err; e; e = (e as { cause?: unknown }).cause) {
-    if (e instanceof AggregateError)
-      parts.push(...e.errors.map((x: unknown) => (x instanceof Error ? x.message : String(x))));
-    else parts.push(e instanceof Error ? e.message : String(e));
-    if (!(e instanceof Error)) break;
-  }
-  return [...new Set(parts.filter(Boolean))].join("\n  caused by: ");
-}

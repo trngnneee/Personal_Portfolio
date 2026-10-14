@@ -9,6 +9,7 @@ import { z } from "zod";
 import { createDb } from "../src/db/client.js";
 import { runMigrations } from "../src/db/migrate.js";
 import { setAdminPassword } from "../src/modules/auth/service.js";
+import { describeError } from "../src/lib/errors.js";
 
 function readHidden(prompt: string): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -81,15 +82,3 @@ main().catch((err: unknown) => {
   console.error(describeError(err));
   process.exit(1);
 });
-
-/** Error message plus its causes (Drizzle wraps connection errors such as ECONNREFUSED / auth failures). */
-function describeError(err: unknown): string {
-  const parts: string[] = [];
-  for (let e: unknown = err; e; e = (e as { cause?: unknown }).cause) {
-    if (e instanceof AggregateError)
-      parts.push(...e.errors.map((x: unknown) => (x instanceof Error ? x.message : String(x))));
-    else parts.push(e instanceof Error ? e.message : String(e));
-    if (!(e instanceof Error)) break;
-  }
-  return [...new Set(parts.filter(Boolean))].join("\n  caused by: ");
-}
