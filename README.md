@@ -154,7 +154,7 @@ git push origin main
 ### 4.5 Render (Blueprint)
 
 1. Render Dashboard → **New → Blueprint** → select this repo → it reads `render.yaml`
-   (`portfolio-api`, `portfolio-web`, `portfolio-admin`, region Singapore).
+   (`portfolio-api`, `portfolio-web`, `portfolio-admin`, region Singapore — **all on the free plan**).
 2. Fill the `sync: false` secrets when prompted:
    - `portfolio-api`: `DATABASE_URL` (Supabase session pooler URI), `DATABASE_CA_CERT` (optional),
      `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`, `RESEND_API_KEY` (optional).
@@ -173,19 +173,28 @@ git push origin main
    If DNS is on Cloudflare, use **DNS only** (grey cloud) until Render has issued certificates. Explicit records
    override the homelab's `*.trngnneee.io.vn` wildcard — make sure nothing else claims `@`, `admin`, `api`.
 
-5. **Create the admin account** — Render → `portfolio-api` → **Shell**:
+5. **Create the admin account and seed content — from your machine.** The free plan has no Render Shell, so these
+   one-off commands connect to Supabase directly. `read -rs` keeps the secrets out of your shell history; values
+   passed this way override `backend/.env`.
 
    ```bash
+   npm ci && npm run build -w shared -w backend
+
+   read -rs DATABASE_URL            # paste the Supabase session pooler URI, Enter
+   export DATABASE_URL DATABASE_SSL=true
+
+   # admin account (prompts for the password; also creates the tables if the API hasn't started yet)
    npm run admin:set-password -w backend -- --email <your-email>
-   ```
 
-6. **Seed content with Cloudinary upload** — same Shell (uses the service's env):
-
-   ```bash
+   # content + upload of seed images to Cloudinary
+   read -rs CLOUDINARY_API_SECRET   # paste, Enter
+   export CLOUDINARY_CLOUD_NAME=<cloud-name> CLOUDINARY_API_KEY=<api-key> CLOUDINARY_API_SECRET
    npm run seed -w backend
+
+   unset DATABASE_URL CLOUDINARY_API_SECRET
    ```
 
-7. Verify:
+6. Verify:
 
    ```bash
    curl -s https://api.trngnneee.io.vn/healthz          # {"ok":true,"db":"up"}
@@ -199,16 +208,16 @@ git push origin main
 
 ## 5. Operations
 
-| Task                     | How                                                                                                                  |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------- |
-| Backup (JSON)            | Admin → Settings → **Export JSON** (all content, no admin account)                                                   |
-| Backup (SQL)             | `pg_dump "$DATABASE_URL" --no-owner --no-privileges -Fc -f portfolio-$(date +%F).dump` (session pooler URI)          |
-| Restore (SQL)            | `pg_restore --no-owner --clean -d "$DATABASE_URL" portfolio-YYYY-MM-DD.dump`                                         |
-| Roll back a deploy       | Render → service → Events → **Rollback** (migrations are forward-only: write a new migration to undo schema changes) |
-| Sign out everywhere      | Admin → Settings → "Sign out of all devices" (bumps `token_version`)                                                 |
-| Reset the admin password | Render Shell: `npm run admin:set-password -w backend -- --email <email>` (also revokes sessions)                     |
-| Rotate `JWT_SECRET`      | Change it in Render → redeploy; every session ends                                                                   |
-| Logs                     | Render → `portfolio-api` → Logs (pino JSON; `authorization`/passwords redacted)                                      |
+| Task                     | How                                                                                                                                                                      |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Backup (JSON)            | Admin → Settings → **Export JSON** (all content, no admin account)                                                                                                       |
+| Backup (SQL)             | `pg_dump "$DATABASE_URL" --no-owner --no-privileges -Fc -f portfolio-$(date +%F).dump` (session pooler URI)                                                              |
+| Restore (SQL)            | `pg_restore --no-owner --clean -d "$DATABASE_URL" portfolio-YYYY-MM-DD.dump`                                                                                             |
+| Roll back a deploy       | Render → service → Events → **Rollback** (migrations are forward-only: write a new migration to undo schema changes)                                                     |
+| Sign out everywhere      | Admin → Settings → "Sign out of all devices" (bumps `token_version`)                                                                                                     |
+| Reset the admin password | From your machine with `DATABASE_URL`/`DATABASE_SSL=true` exported (see §4.5 step 5): `npm run admin:set-password -w backend -- --email <email>` (also revokes sessions) |
+| Rotate `JWT_SECRET`      | Change it in Render → redeploy; every session ends                                                                                                                       |
+| Logs                     | Render → `portfolio-api` → Logs (pino JSON; `authorization`/passwords redacted)                                                                                          |
 
 ### Limits & trade-offs
 
@@ -216,4 +225,8 @@ git push origin main
   instance; use a shared store if you ever scale out.
 - The public site is a client-rendered SPA: link previews use the static tags in `frontend/index.html`;
   per-page `<title>`/OG tags are applied after JS runs.
-- Supabase free tier pauses inactive projects; Render `starter` keeps the API awake.
+- **Everything runs on free tiers.** The Render free web service sleeps after ~15 minutes without traffic; the next
+  visitor waits ~30–60 s while it wakes (the site shows loading skeletons meanwhile). Free instances get ~750
+  hours/month — enough for this one service. Upgrade `portfolio-api` to `plan: starter` in `render.yaml` to keep it awake.
+- Supabase free projects pause after 7 days without activity (a sleeping API means fewer DB hits) — resume it from
+  the Supabase dashboard, or upgrade.

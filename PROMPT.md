@@ -204,7 +204,7 @@ Middleware `requireSection(key)` dùng chung cho các route public gắn với s
 
 `render.yaml` gồm 3 service (DB là Supabase, ngoài blueprint):
 1. **Database: Supabase** (không nằm trong blueprint). API kết nối bằng **Session pooler** URI (IPv4 — Render không có IPv6 egress, direct connection của Supabase chỉ có IPv6), `DATABASE_SSL=true`, tùy chọn `DATABASE_CA_CERT` (PEM CA của Supabase) để verify TLS. Bắt buộc **bật RLS trên mọi bảng `public`** (migration `0001_enable_rls` + test) vì Supabase Data API (PostgREST) phơi schema `public` cho anon key; API dùng role owner nên bypass RLS.
-2. **`portfolio-api`** — Web Service, runtime `node`, plan **starter** (free plan bị sleep khi idle).
+2. **`portfolio-api`** — Web Service, runtime `node`, plan **free** (user chọn: toàn bộ free; sleep sau ~15 phút idle, không có Render Shell). Muốn luôn thức → đổi `starter`.
    - `buildCommand: npm ci --include=dev && npm run build -w shared -w backend` (`--include=dev` vì `NODE_ENV=production` sẽ bỏ qua `typescript`)
    - `startCommand: npm run start -w backend` (chạy migrations rồi listen `PORT`)
    - `healthCheckPath: /healthz`
@@ -224,7 +224,7 @@ Middleware `requireSection(key)` dùng chung cho các route public gắn với s
 - Supabase **free project bị pause sau 7 ngày không hoạt động** → ghi rõ trong README (traffic thật hoặc plan Pro).
 - Backup: Supabase daily backup theo plan (PITR ở Pro) + nút Export JSON trong admin + lệnh `pg_dump` (in ra cho user tự chạy).
 - Migration chạy tự động khi API khởi động (drizzle migrator, idempotent).
-- Tạo tài khoản admin lần đầu: mở **Render Shell** của `portfolio-api` → `npm run admin:set-password -w backend -- --email <email>`.
+- Tạo tài khoản admin lần đầu + seed: free plan **không có Render Shell** → chạy từ máy user với `DATABASE_URL` (Supabase session pooler) + `DATABASE_SSL=true`: `npm run admin:set-password -w backend -- --email <email>`, `npm run seed -w backend`.
 - Sitemap: BE sinh `GET /sitemap.xml` (gồm bài blog published + route của section đang bật); static site rewrite `/sitemap.xml` → API.
 - Mọi bước deploy **in ra cho user tự làm**, agent không thực hiện.
 

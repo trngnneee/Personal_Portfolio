@@ -152,12 +152,12 @@ Astryx parts. Every deviation is listed in [`admin/DEVIATIONS.md`](../admin/DEVI
 
 ## 9. Deployment
 
-| Component                          | Where                                            | Notes                                                                                   |
-| ---------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| `portfolio-api`                    | Render web service (Node 22, starter, Singapore) | Build with dev deps, migrate on start, `/healthz` health check, zero-downtime deploys   |
-| `portfolio-web`, `portfolio-admin` | Render static sites                              | SPA rewrite, immutable `/assets/*`, security headers, `/sitemap.xml` proxied to the API |
-| Database                           | Supabase (Singapore)                             | Session pooler (IPv4), TLS, RLS, pool max 5                                             |
-| Media                              | Cloudinary                                       | Folder per content type, seed assets under `portfolio/seed/`                            |
+| Component                          | Where                                                  | Notes                                                                                   |
+| ---------------------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| `portfolio-api`                    | Render web service (Node 22, **free** plan, Singapore) | Build with dev deps, migrate on start, `/healthz` health check; sleeps when idle (free) |
+| `portfolio-web`, `portfolio-admin` | Render static sites                                    | SPA rewrite, immutable `/assets/*`, security headers, `/sitemap.xml` proxied to the API |
+| Database                           | Supabase (Singapore)                                   | Session pooler (IPv4), TLS, RLS, pool max 5                                             |
+| Media                              | Cloudinary                                             | Folder per content type, seed assets under `portfolio/seed/`                            |
 
 The API is stateless (JWT + Postgres + Cloudinary), so it could run several instances. The only per-instance
 state is the in-memory rate limiter.

@@ -9,8 +9,9 @@ services:
   - type: web
     name: portfolio-api
     runtime: node
-    # Free web services sleep when idle; starter stays up.
-    plan: starter
+    # Free: sleeps after ~15 min idle (cold start ~30–60 s), no Shell, ~750 h/month.
+    # Switch to `starter` (paid) to keep it awake.
+    plan: free
     # Same region as the Supabase project (ap-southeast-1) to keep DB latency low.
     region: singapore
     # --include=dev: NODE_ENV=production would otherwise skip typescript/tsx needed to build (and to seed).

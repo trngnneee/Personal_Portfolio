@@ -78,6 +78,18 @@ async function main() {
 }
 
 main().catch((err: unknown) => {
-  console.error(err instanceof Error ? err.message : err);
+  console.error(describeError(err));
   process.exit(1);
 });
+
+/** Error message plus its causes (Drizzle wraps connection errors such as ECONNREFUSED / auth failures). */
+function describeError(err: unknown): string {
+  const parts: string[] = [];
+  for (let e: unknown = err; e; e = (e as { cause?: unknown }).cause) {
+    if (e instanceof AggregateError)
+      parts.push(...e.errors.map((x: unknown) => (x instanceof Error ? x.message : String(x))));
+    else parts.push(e instanceof Error ? e.message : String(e));
+    if (!(e instanceof Error)) break;
+  }
+  return [...new Set(parts.filter(Boolean))].join("\n  caused by: ");
+}
