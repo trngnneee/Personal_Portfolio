@@ -2,12 +2,12 @@
 
 Personal portfolio of **Dang Truong Nguyen** (Backend · Cloud · DevOps) with its own admin dashboard and API.
 
-| App             | Path                   | Stack                                                   | Production URL                       |
-| --------------- | ---------------------- | ------------------------------------------------------- | ------------------------------------ |
-| Public site     | `frontend/`            | Vite · React 19 · Tailwind v4 · TanStack Query · motion | https://trngnneee.io.vn              |
-| Admin dashboard | `admin/`               | Vite · React 19 · Astryx design system · i18n (vi/en)   | https://portfolio-admin.onrender.com |
-| API             | `backend/`             | Express 5 · Drizzle · PostgreSQL · Cloudinary · JWT     | https://portfolio-api-5hvt.onrender.com   |
-| Shared code     | `shared/`, `markdown/` | zod schemas, API types, enums · markdown renderer       | —                                    |
+| App             | Path                   | Stack                                                   | Production URL                          |
+| --------------- | ---------------------- | ------------------------------------------------------- | --------------------------------------- |
+| Public site     | `frontend/`            | Vite · React 19 · Tailwind v4 · TanStack Query · motion | https://trngnneee.io.vn                 |
+| Admin dashboard | `admin/`               | Vite · React 19 · Astryx design system · i18n (vi/en)   | https://portfolio-admin.onrender.com    |
+| API             | `backend/`             | Express 5 · Drizzle · PostgreSQL · Cloudinary · JWT     | https://portfolio-api-5hvt.onrender.com |
+| Shared code     | `shared/`, `markdown/` | zod schemas, API types, enums · markdown renderer       | —                                       |
 
 Database: **Supabase Postgres** in production, Docker Postgres locally. Hosting: **Render** (`render.yaml`).
 Architecture and design decisions: [`docs/SYSTEM_DESIGN.md`](docs/SYSTEM_DESIGN.md).
@@ -133,7 +133,8 @@ Migrations run automatically when the API starts (drizzle migrator, forward-only
 ### 4.2 Cloudinary
 
 Dashboard → API Keys: copy cloud name, API key and secret. Uploads go to `portfolio/<folder>`.
-CV PDFs are uploaded as `raw` (Cloudinary blocks PDF delivery as `image` on new accounts).
+CV PDFs are uploaded as `raw`. **New Cloudinary accounts block PDF/ZIP delivery (HTTP 401)** — enable
+Cloudinary Console → Settings → Security → **"Allow delivery of PDF and ZIP files"**, otherwise "Download CV" fails.
 
 ### 4.3 Resend (optional)
 
